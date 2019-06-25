@@ -4,53 +4,55 @@
   "description": "WayFarer is a public bus transportation booking server.",
   "main": "app.js",
   "scripts": {
-    "build": "babel ./server --out-dir ./dist --copy-files --ignore ./node_modules,./coverage,./.babelrc,.nyc_output,./package.json,./npm-debug.log,./.travis.yml,./.eslintrc.js,./UI,./README.md",
-    "start": "NODE_ENV=production node ./dist/app.js",
-    "start-dev": "NODE_ENV=development DEBUG=app/debug nodemon --exec babel-node ./server/app.js",
-    "test": "NODE_ENV=test nyc --reporter=html --reporter=text mocha --timeout 20000 -r @babel/register ./server/tests/ --exit"
+      "coverage": "nyc report --reporter=text-lcov | coveralls",
+      "coveralls": "nyc --reporter=lcov --reporter=text-lcov npm test",
+      "build": "babel ./server --out-dir ./dist --copy-files --ignore ./node_modules,./coverage,./.babelrc,.nyc_output,./package.json,./npm-debug.log,./.travis.yml,./.eslintrc.js,./UI,./README.md",
+      "start": "NODE_ENV=production node ./dist/app.js",
+      "start-dev": "NODE_ENV=development DEBUG=app/debug nodemon --exec babel-node ./server/app.js",
+      "test": "NODE_ENV=test nyc --reporter=html --reporter=text mocha --timeout 20000 -r @babel/register ./server/tests/ --exit"
   },
   "repository": {
-    "type": "git",
-    "url": "git+https://github.com/shonubijerry/way-farer.git"
+      "type": "git",
+      "url": "git+https://github.com/shonubijerry/way-farer.git"
   },
   "keywords": [
-    "transportation"
+      "transportation"
   ],
   "author": "Shonubi Oluwakorede",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/shonubijerry/way-farer/issues"
+      "url": "https://github.com/shonubijerry/way-farer/issues"
   },
   "homepage": "https://github.com/shonubijerry/way-farer#readme",
   "dependencies": {
-    "@babel/runtime": "^7.4.5",
-    "async": "^3.1.0",
-    "bcrypt": "^3.0.6",
-    "body-parser": "^1.19.0",
-    "cors": "^2.8.5",
-    "debug": "^4.1.1",
-    "dotenv": "^8.0.0",
-    "express": "^4.17.1",
-    "jsonwebtoken": "^8.5.1",
-    "pg": "^7.11.0",
-    "uuid": "^3.3.2"
+      "@babel/runtime": "^7.4.5",
+      "async": "^3.1.0",
+      "bcrypt": "^3.0.6",
+      "body-parser": "^1.19.0",
+      "cors": "^2.8.5",
+      "debug": "^4.1.1",
+      "dotenv": "^8.0.0",
+      "express": "^4.17.1",
+      "jsonwebtoken": "^8.5.1",
+      "pg": "^7.11.0",
+      "uuid": "^3.3.2"
   },
   "devDependencies": {
-    "@babel/cli": "^7.4.4",
-    "@babel/core": "^7.4.5",
-    "@babel/node": "^7.4.5",
-    "@babel/plugin-transform-runtime": "^7.4.4",
-    "@babel/preset-env": "^7.4.5",
-    "@babel/register": "^7.4.4",
-    "chai": "^4.2.0",
-    "chai-http": "^4.3.0",
-    "coveralls": "^3.0.4",
-    "eslint": "^6.0.1",
-    "eslint-config-airbnb": "^17.1.0",
-    "eslint-plugin-import": "^2.18.0",
-    "mocha": "^6.1.4",
-    "mocha-lcov-reporter": "^1.3.0",
-    "nodemon": "^1.19.1",
-    "nyc": "^14.1.1"
+      "@babel/cli": "^7.4.4",
+      "@babel/core": "^7.4.5",
+      "@babel/node": "^7.4.5",
+      "@babel/plugin-transform-runtime": "^7.4.4",
+      "@babel/preset-env": "^7.4.5",
+      "@babel/register": "^7.4.4",
+      "chai": "^4.2.0",
+      "chai-http": "^4.3.0",
+      "coveralls": "^3.0.4",
+      "eslint": "^6.0.1",
+      "eslint-config-airbnb": "^17.1.0",
+      "eslint-plugin-import": "^2.18.0",
+      "mocha": "^6.1.4",
+      "mocha-lcov-reporter": "^1.3.0",
+      "nodemon": "^1.19.1",
+      "nyc": "^14.1.1"
   }
 }
