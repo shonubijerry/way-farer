@@ -48,6 +48,36 @@ class UsersController {
       return ResponseHelper.error(res, 500, errorStrings.serverError);
     }
   }
+
+  /**
+     * Login a user
+     * @param {object} req
+     * @param {object} res
+     */
+
+  static async signin(req, res) {
+    try {
+      const signInResult = await usersModel.signinQuery(req.body);
+
+      if (signInResult.error === 'wrong-password') {
+        return ResponseHelper.error(res, 403, errorStrings.loginFailure);
+      }
+      if (!signInResult) {
+        throw new Error(errorStrings.serverError);
+      }
+      const userData = {
+        user_id: signInResult.id,
+        first_name: signInResult.first_name,
+        last_name: signInResult.last_name,
+        email: signInResult.email,
+        is_admin: signInResult.is_admin,
+        token: generateToken(signInResult),
+      };
+      return ResponseHelper.success(res, 200, userData);
+    } catch (error) {
+      return ResponseHelper.error(res, 500, errorStrings.serverError);
+    }
+  }
 }
 
 export default UsersController;

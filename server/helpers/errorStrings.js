@@ -11,6 +11,7 @@ const errorStrings = {
   validFirstName: 'Firstname field cannot be empty and must be only letters',
   validLastName: 'Lastname field cannot be empty and must be only letters.',
   validEmail: 'Enter valid email with top level domain and must not be empty',
+  loginFailure: 'Could not login. Email and password do not match',
 };
 
 export default errorStrings;

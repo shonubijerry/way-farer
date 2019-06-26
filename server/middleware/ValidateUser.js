@@ -38,6 +38,25 @@ class ValidateUser {
   }
 
   /**
+   * validate email and password
+   * @param {Object} request
+   * @param {Object} response
+   * @callback {Function} next
+   * @return {Object} error
+   */
+
+  static validateSigninFormData(request, response, next) {
+    const signinErrors = ValidateUser.checkEmailAndPasswordErrors(request.body);
+
+    const error = Validator.findErrors(signinErrors);
+
+    if (error.length > 0) {
+      return responseHelper.error(response, 400, error);
+    }
+    return next();
+  }
+
+  /**
    * collect all possible errors from firstname, lastname and password inputs
    * @param {Object} request
    * @return {String} errors
