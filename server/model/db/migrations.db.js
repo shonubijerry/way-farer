@@ -9,16 +9,6 @@ pool.query(`DROP TABLE IF EXISTS users CASCADE;
     password VARCHAR NOT NULL,
     is_admin BOOLEAN NOT NULL DEFAULT false
   );
-  INSERT INTO users (
-  id, email, first_name, last_name, password, is_admin
-  ) VALUES (
-    '2e0785a9-3611-491f-951c-62f2fe4c320a',
-    'shonubijerry@gmail.com',
-    'Sho',
-    'Korey',
-    '$2b$10$DAUlN//SebBEPkWppjD1AeIRy6dWJ3k8DMv.T4hBSeZh/Lycb0Yki',
-    true
-  );
   DROP TABLE IF EXISTS bus CASCADE;
   CREATE TABLE bus(
     id UUID NOT NULL UNIQUE PRIMARY KEY,
@@ -43,6 +33,7 @@ pool.query(`DROP TABLE IF EXISTS users CASCADE;
     id UUID NOT NULL UNIQUE PRIMARY KEY,
     trip_id UUID NOT NULL,
     user_id UUID NOT NULL,
+    seat_number SMALLINT NOT NULL,
     created_on DATE NOT NULL DEFAULT CURRENT_DATE
   );
 `).then(() => {
