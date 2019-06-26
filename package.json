@@ -4,10 +4,17 @@
   "description": "WayFarer is a public bus transportation booking server.",
   "main": "app.js",
   "scripts": {
+    "lint": "eslint ./server",
     "build": "babel ./server --out-dir ./dist --copy-files --ignore ./node_modules,./coverage,./.babelrc,.nyc_output,./package.json,./npm-debug.log,./.travis.yml,./.eslintrc.js,./UI,./README.md",
     "start": "NODE_ENV=production node ./dist/app.js",
-    "start-dev": "NODE_ENV=development DEBUG=app/debug nodemon --exec babel-node ./server/app.js",
-    "test": "NODE_ENV=test nyc --reporter=html --reporter=text mocha --timeout 20000 -r @babel/register ./server/tests/ --exit"
+    "start-dev": "NODE_ENV=development npm run exec-db-dev && NODE_ENV=development DEBUG=app/debug nodemon --exec babel-node ./server/app.js",
+    "test": "npm run pre-test && NODE_ENV=test nyc --reporter=html --reporter=text mocha --timeout 20000 -r @babel/register ./server/tests/ --exit",
+    "pre-test": "NODE_ENV=test npm run exec-db-dev",
+    "exec-db-dev": "npm run dev-migration && npm run seeder",
+    "dev-migration": "DEBUG=app/debug babel-node ./server/model/db/migrations.db",
+    "seeder": "DEBUG=app/seeder babel-node ./server/model/db/seeders.db",
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "coveralls": "nyc --reporter=lcov --reporter=text-lcov npm test"
   },
   "repository": {
     "type": "git",
@@ -45,8 +52,9 @@
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
     "coveralls": "^3.0.4",
-    "eslint": "^6.0.1",
+    "eslint": "^5.16.0",
     "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.18.0",
     "mocha": "^6.1.4",
     "mocha-lcov-reporter": "^1.3.0",
