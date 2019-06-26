@@ -38,6 +38,24 @@ class UsersModel extends Model {
   }
 
   /**
+     * Find user in data structure
+     * @param {object} req
+     * @returns {object}
+     */
+
+  async signinQuery({ email, password }) {
+    try {
+      const foundUser = await this.findUserByEmail(email);
+      if (foundUser && passwordHelper.comparePasswords(password, foundUser.password)) {
+        return foundUser;
+      }
+      return { error: 'wrong-password' };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  /**
     * Find a user by email
     * @param {String} email
     * @return boolean

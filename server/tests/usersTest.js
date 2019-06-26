@@ -10,6 +10,7 @@ chai.use(chaiHttp);
 dotenv.config();
 
 const signupUrl = '/api/v1/auth/signup';
+const signinUrl = '/api/v1/auth/signin';
 
 describe('User Controller', () => {
   describe('POST SIGN UP', () => {
@@ -26,11 +27,11 @@ describe('User Controller', () => {
           expect(res).to.have.status(201);
           expect(res.body).to.be.an('object');
           expect(res.body).to.have.property('data');
-          expect(res.body.data).to.have.property('token');
           expect(res.body.data).to.have.property('user_id');
           expect(res.body.data).to.have.property('first_name');
           expect(res.body.data).to.have.property('last_name');
           expect(res.body.data).to.have.property('email');
+          expect(res.body.data).to.have.property('token');
           expect(res.body.data).to.have.property('is_admin');
           done();
         });
@@ -140,6 +141,79 @@ describe('User Controller', () => {
           expect(res.body).to.be.an('object');
           expect(res.body).to.have.property('error');
           expect(res.body.error[1]).to.equal(errorStrings.passwordEmpty);
+          done();
+        });
+    });
+  });
+
+  describe('POST SIGN IN', () => {
+    it('it should login a user with valid email and password', (done) => {
+      chai.request(app)
+        .post(signinUrl)
+        .send({
+          email: 'shonubijerry@gmail.com', // valid login details
+          password: 'olujac1$',
+        })
+        .end((error, res) => {
+          expect(res).to.have.status(200);
+          expect(res.body).to.be.an('object');
+          expect(res.body).to.have.property('data');
+          expect(res.body.data).to.be.a('object');
+          expect(res.body.data).to.have.property('token');
+          expect(res.body.data).to.have.property('user_id');
+          expect(res.body.data).to.have.property('first_name');
+          expect(res.body.data).to.have.property('last_name');
+          expect(res.body.data).to.have.property('email');
+          expect(res.body.data).to.have.property('token');
+          expect(res.body.data).to.have.property('is_admin');
+          done();
+        });
+    });
+
+    it('it should not login a user with invalid email', (done) => {
+      chai.request(app)
+        .post(signinUrl)
+        .send({
+          email: 'shonubijerrygmail.com', // invalid login email
+          password: 'olujac1$',
+        })
+        .end((error, res) => {
+          expect(res).to.have.status(400);
+          expect(res.body).to.be.an('object');
+          expect(res.body).to.have.property('error');
+          expect(res.body.error).to.eql([`${errorStrings.validEmail}`]);
+          done();
+        });
+    });
+
+    it('it should not login a user with empty password', (done) => {
+      chai.request(app)
+        .post(signinUrl)
+        .send({
+          email: 'shonubijerry@gmail.com',
+          password: '', // empty login password
+        })
+        .end((error, res) => {
+          expect(res).to.have.status(400);
+          expect(res.body).to.be.an('object');
+          expect(res.body).to.have.property('error');
+          expect(res.body.error).to.eql([`${errorStrings.passwordEmpty}`]);
+          done();
+        });
+    });
+
+    it('it should not login a user with wrong login email or password', (done) => {
+      chai.request(app)
+        .post(signinUrl)
+        .send({
+          email: 'shonubijerry@gmail.com',
+          password: 'olujac1', // incorrect login password
+        })
+        .end((error, res) => {
+          expect(res).to.have.status(403);
+          expect(res.body).to.be.an('object');
+          expect(res.body).to.have.property('error');
+          expect(res.body.error).to.equal(errorStrings.loginFailure);
           done();
         });
     });

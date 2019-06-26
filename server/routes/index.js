@@ -15,6 +15,7 @@ import UsersController from '../controllers/usersController';
 const routes = (app) => {
   const api = '/api/v1';
   app.post(`${api}/auth/signup`, ValidateUser.validateSignupFormData, UsersController.signup);
+  app.post(`${api}/auth/signin`, ValidateUser.validateSigninFormData, UsersController.signin);
   app.get('/', (req, res) => ResponseHelper.success(res, 200, { message: 'Welcome to Way Farer' }));
   // invalid url
   app.all('*', (req, res) => ResponseHelper.error(res, 404, errorStrings.pageNotFound));
