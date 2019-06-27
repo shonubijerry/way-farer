@@ -1,3 +1,4 @@
+import Joi from '@hapi/joi';
 /**
  *    @fileOverview Class to hold general validation methods
  *    @class Validator
@@ -6,36 +7,21 @@
 
 class Validator {
   /**
-   * check if data validation produces any errors
-   * @param {Object} request
-   * @return {boolean} false
+   * validate data by checking it with a predefined Joi schema
+   * @param {Object} data
+   * @param {Object} schema
+   * @param {Object} response
+   * @param {Object} next
+   * @callback {Function} next
+   * @return {Object} error
    */
-  static findErrors(errors) {
-    const error = [];
-    errors.map((item) => {
-      if (item !== '') {
-        error.push(item);
-      }
-      return error;
-    });
-    return error;
-  }
-
-
-  /**
-   * collect all possible errors
-   * @param {string} input form input
-   * @param {string} emptyRule RegExp pattern to match empty input
-   * @param {string} validRule RegExp pattern to match valid input
-   * @param {String} errorString error message to return
-   * @param {Object} errors
-   */
-
-  static validate(input, emptyRule, validRule, errorString) {
+  static validateJoi(data, schema) {
     let error = '';
-    if (!input || !emptyRule.test(input) || !validRule.test(input)) {
-      error = errorString;
-    }
+    Joi.validate(data, schema, (err) => {
+      if (err) {
+        error = err.details ? err.details[0].message.replace(/['"]/g, '') : err.message;
+      }
+    });
     return error;
   }
 }

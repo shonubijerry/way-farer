@@ -15,6 +15,7 @@ module.exports = {
         sourceType: 'module',
     },
     rules: {
-        camelcase: 'off'
+        camelcase: 'off',
+        "max-len": ["error", { "code": 150 }]
     },
 };

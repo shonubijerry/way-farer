@@ -21,10 +21,11 @@ pool.query(`DROP TABLE IF EXISTS users CASCADE;
   DROP TABLE IF EXISTS trip CASCADE;
   CREATE TABLE trip(
     id UUID NOT NULL UNIQUE PRIMARY KEY,
+    user_id UUID NOT NULL,
     bus_id UUID NOT NULL,
     origin VARCHAR(100) NOT NULL,
     destination VARCHAR(100) NOT NULL,
-    trip_date DATE NOT NULL DEFAULT CURRENT_DATE,
+    trip_date VARCHAR(100) NOT NULL,
     fare NUMERIC(10, 2) NOT NULL,
     status VARCHAR(10) NOT NULL DEFAULT 'active'
   );

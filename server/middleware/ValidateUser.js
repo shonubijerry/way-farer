@@ -1,3 +1,4 @@
+import Joi from '@hapi/joi';
 import errorStrings from '../helpers/errorStrings';
 import Validator from '../helpers/Validator';
 import rules from '../helpers/rules';
@@ -22,19 +23,23 @@ class ValidateUser {
    * @callback {Function} next
    * @return {Object} error
    */
-
   static validateSignupFormData(request, response, next) {
-    const nameErrors = ValidateUser.checkNameErrors(request.body);
-    const emailAndPasswordErrors = ValidateUser.checkEmailAndPasswordErrors(request.body);
+    const name = Joi.string().regex(rules.validName).required().error(new Error(errorStrings.validName));
+    const password = Joi.string().min(8).required().strict();
+    const email = Joi.string().email().lowercase().required();
 
-    const signupErrors = nameErrors.concat(emailAndPasswordErrors);
+    const createSignUpSchema = Joi.object().keys({
+      first_name: name,
+      last_name: name,
+      password,
+      email,
+    });
 
-    const error = Validator.findErrors(signupErrors);
-
-    if (error.length > 0) {
-      return responseHelper.error(response, 400, error);
+    const error = Validator.validateJoi(request.body, createSignUpSchema);
+    if (!error) {
+      return next();
     }
-    return next();
+    return responseHelper.error(response, 422, error);
   }
 
   /**
@@ -46,64 +51,19 @@ class ValidateUser {
    */
 
   static validateSigninFormData(request, response, next) {
-    const signinErrors = ValidateUser.checkEmailAndPasswordErrors(request.body);
+    const password = Joi.string().required();
+    const email = Joi.string().email().lowercase().required();
 
-    const error = Validator.findErrors(signinErrors);
+    const createSignUpSchema = Joi.object().keys({
+      password,
+      email,
+    });
 
-    if (error.length > 0) {
-      return responseHelper.error(response, 400, error);
+    const error = Validator.validateJoi(request.body, createSignUpSchema);
+    if (!error) {
+      return next();
     }
-    return next();
-  }
-
-  /**
-   * collect all possible errors from firstname, lastname and password inputs
-   * @param {Object} request
-   * @return {String} errors
-   */
-
-  static checkNameErrors({
-    first_name, last_name, password,
-  }) {
-    const errors = [];
-
-    const firstNameError = Validator.validate(
-      first_name, rules.empty, rules.validName, errorStrings.validFirstName,
-    );
-    errors.push(firstNameError);
-
-    const lastnameError = Validator.validate(
-      last_name, rules.empty, rules.validName, errorStrings.validLastName,
-    );
-    errors.push(lastnameError);
-
-    if (!rules.passwordLength.test(password)) {
-      const passwordError = errorStrings.passwordLength;
-      errors.push(passwordError);
-    }
-
-    return errors;
-  }
-
-  /**
-   * collect all possible errors from email and password inputs
-   * @param {Object} request
-   * @return {String} errors
-   */
-
-  static checkEmailAndPasswordErrors({ email, password }) {
-    const errors = [];
-
-    const emailError = Validator.validate(
-      email, rules.empty, rules.validEmail, errorStrings.validEmail,
-    );
-    errors.push(emailError);
-
-    if (!password || !rules.empty.test(password)) {
-      const passwordEmptyError = errorStrings.passwordEmpty;
-      errors.push(passwordEmptyError);
-    }
-    return errors;
+    return responseHelper.error(response, 422, error);
   }
 }
 
