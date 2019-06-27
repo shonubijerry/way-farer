@@ -12,7 +12,7 @@ dotenv.config();
 const signupUrl = '/api/v1/auth/signup';
 const signinUrl = '/api/v1/auth/signin';
 
-describe('User Controller', () => {
+describe('USER CONTROLLER', () => {
   describe('POST SIGN UP', () => {
     it(`it should register a user with POST ${signupUrl}`, (done) => {
       chai.request(app)
@@ -47,10 +47,10 @@ describe('User Controller', () => {
           password: 'olujac1$',
         })
         .end((error, res) => {
-          expect(res).to.have.status(400);
+          expect(res).to.have.status(422);
           expect(res.body).to.be.an('object');
           expect(res.body).to.have.property('error');
-          expect(res.body.error).to.eql([`${errorStrings.validFirstName}`]);
+          expect(res.body.error).to.equal(errorStrings.validName);
           done();
         });
     });
@@ -65,10 +65,10 @@ describe('User Controller', () => {
           password: 'olujac1$',
         })
         .end((error, res) => {
-          expect(res).to.have.status(400);
+          expect(res).to.have.status(422);
           expect(res.body).to.be.an('object');
           expect(res.body).to.have.property('error');
-          expect(res.body.error).to.eql([`${errorStrings.validLastName}`]);
+          expect(res.body.error).to.equal(errorStrings.validName);
           done();
         });
     });
@@ -83,10 +83,10 @@ describe('User Controller', () => {
           password: 'olujac1$',
         })
         .end((error, res) => {
-          expect(res).to.have.status(400);
+          expect(res).to.have.status(422);
           expect(res.body).to.be.an('object');
           expect(res.body).to.have.property('error');
-          expect(res.body.error).to.eql([`${errorStrings.validEmail}`]);
+          expect(res.body.error).to.equal(errorStrings.validEmail);
           done();
         });
     });
@@ -119,10 +119,10 @@ describe('User Controller', () => {
           password: 'adann', // password length short
         })
         .end((error, res) => {
-          expect(res).to.have.status(400);
+          expect(res).to.have.status(422);
           expect(res.body).to.be.an('object');
           expect(res.body).to.have.property('error');
-          expect(res.body.error).to.eql([`${errorStrings.passwordLength}`]);
+          expect(res.body.error).to.equal(errorStrings.passwordLength);
           done();
         });
     });
@@ -137,10 +137,10 @@ describe('User Controller', () => {
           password: '', // empty password
         })
         .end((error, res) => {
-          expect(res).to.have.status(400);
+          expect(res).to.have.status(422);
           expect(res.body).to.be.an('object');
           expect(res.body).to.have.property('error');
-          expect(res.body.error[1]).to.equal(errorStrings.passwordEmpty);
+          expect(res.body.error).to.equal(errorStrings.passwordEmpty);
           done();
         });
     });
@@ -178,10 +178,10 @@ describe('User Controller', () => {
           password: 'olujac1$',
         })
         .end((error, res) => {
-          expect(res).to.have.status(400);
+          expect(res).to.have.status(422);
           expect(res.body).to.be.an('object');
           expect(res.body).to.have.property('error');
-          expect(res.body.error).to.eql([`${errorStrings.validEmail}`]);
+          expect(res.body.error).to.equal(errorStrings.validEmail);
           done();
         });
     });
@@ -194,10 +194,10 @@ describe('User Controller', () => {
           password: '', // empty login password
         })
         .end((error, res) => {
-          expect(res).to.have.status(400);
+          expect(res).to.have.status(422);
           expect(res.body).to.be.an('object');
           expect(res.body).to.have.property('error');
-          expect(res.body.error).to.eql([`${errorStrings.passwordEmpty}`]);
+          expect(res.body.error).to.equal(errorStrings.passwordEmpty);
           done();
         });
     });
