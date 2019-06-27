@@ -21,7 +21,6 @@ pool.query(`DROP TABLE IF EXISTS users CASCADE;
   DROP TABLE IF EXISTS trip CASCADE;
   CREATE TABLE trip(
     id UUID NOT NULL UNIQUE PRIMARY KEY,
-    user_id UUID NOT NULL,
     bus_id UUID NOT NULL,
     origin VARCHAR(100) NOT NULL,
     destination VARCHAR(100) NOT NULL,

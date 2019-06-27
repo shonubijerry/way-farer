@@ -78,7 +78,6 @@ describe('TRIP CONTROLLER', () => {
             expect(res.body).to.have.property('data');
             expect(res.body.data).to.be.a('object');
             expect(res.body.data).to.have.property('id');
-            expect(res.body.data).to.have.property('user_id');
             expect(res.body.data).to.have.property('bus_id');
             expect(res.body.data).to.have.property('origin');
             expect(res.body.data).to.have.property('destination');
@@ -202,19 +201,104 @@ describe('TRIP CONTROLLER', () => {
       });
     });
   });
+
+
+  describe('GET ALL TRIPS', () => {
+    it('it should return authentication error', (done) => {
+      chai.request(app)
+        .get(tripUrl)
+        .end((error, res) => {
+          expect(res).to.have.status(401);
+          expect(res.body).to.be.a('object');
+          expect(res.body).to.have.property('error');
+          expect(res.body.error).to.equal(errorStrings.notAuthenticated);
+          done();
+        });
+    });
+    describe('Admin and user should get all trips', () => {
+      it('it should get all trips for admin', (done) => {
+        chai.request(app)
+          .get(tripUrl)
+          .set('Authorization', currentToken)
+          .end((error, res) => {
+            expect(res).to.have.status(200);
+            expect(res.body).to.be.a('object');
+            expect(res.body).to.have.property('data');
+            expect(res.body.data).to.be.a('array');
+            expect(res.body.data[0]).to.be.a('object');
+            expect(res.body.data[0]).to.have.property('id');
+            expect(res.body.data[0]).to.have.property('bus_id');
+            expect(res.body.data[0]).to.have.property('origin');
+            expect(res.body.data[0]).to.have.property('destination');
+            expect(res.body.data[0]).to.have.property('trip_date');
+            expect(res.body.data[0]).to.have.property('fare');
+            expect(res.body.data[0]).to.have.property('status');
+            done();
+          });
+      });
+    });
+
+    describe('User should get all trips', () => {
+      before((done) => {
+        chai.request(app)
+          .post(signinUrl)
+          .send({
+            email: 'adenekan2017@gmail.com', // this user is not an admin
+            password: 'olujac1$',
+          })
+          .end((error, res) => {
+            currentToken = res.body.data.token;
+            done();
+          });
+      });
+
+      it('It should get all trips for a user', (done) => {
+        chai.request(app)
+          .get(tripUrl)
+          .set('Authorization', currentToken)
+          .end((error, res) => {
+            expect(res).to.have.status(200);
+            expect(res.body).to.be.a('object');
+            expect(res.body).to.have.property('data');
+            expect(res.body.data).to.be.a('array');
+            expect(res.body.data[0]).to.be.a('object');
+            expect(res.body.data[0]).to.have.property('id');
+            expect(res.body.data[0]).to.have.property('bus_id');
+            expect(res.body.data[0]).to.have.property('origin');
+            expect(res.body.data[0]).to.have.property('destination');
+            expect(res.body.data[0]).to.have.property('trip_date');
+            expect(res.body.data[0]).to.have.property('fare');
+            expect(res.body.data[0]).to.have.property('status');
+            done();
+          });
+      });
+    });
+  });
 });
 
-// describe('Expired session', () => {
-//   it('it Return session expired for admin', (done) => {
-//     chai.request(app)
-//       .post(tripUrl)
-//       .send(testData.trip[0])
-//       .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJlMDc4NWE5LTM2MTEtNDkxZi05NTFjLTYyZjJmZTRjMzIwYSIsImlzX2FkbWluIjp0cnVlLCJpYXQiOjE1NjE1ODI5MTAsImV4cCI6MTU2MTY2OTMxMH0.i7qnPvsnGbWWqVKWItX3yfcLrjVX_6S4AxQub8PNwXs')
-//       .end((error, res) => {
-//         expect(res).to.have.status(419);
-//         expect(res.body).to.be.an('object');
-//         expect(res.body).to.have.property('error');
-//         done();
-//       });
-//   });
-// });
+describe('Expired session', () => {
+  it('it Return session expired for a user', (done) => {
+    chai.request(app)
+      .get(tripUrl)
+      .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWIwYzRiLTFkNGEtNGU0NC04YjA5LTY2ZTM1NTRjMDQ1YiIsImlzX2FkbWluIjpmYWxzZSwiaWF0IjoxNTYxNjYxOTQ5LCJleHAiOjE1NjE2NjIwMzV9.kTXgIDGjKOaQ5cB36o2D3wyV4UEA_w0R37OiKu4je70')
+      .end((error, res) => {
+        expect(res).to.have.status(419);
+        expect(res.body).to.be.an('object');
+        expect(res.body).to.have.property('error');
+        done();
+      });
+  });
+
+  it('it Return session expired for admin', (done) => {
+    chai.request(app)
+      .post(tripUrl)
+      .send(testData.trip[0])
+      .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWIwYzRiLTFkNGEtNGU0NC04YjA5LTY2ZTM1NTRjMDQ1YiIsImlzX2FkbWluIjpmYWxzZSwiaWF0IjoxNTYxNjYxOTQ5LCJleHAiOjE1NjE2NjIwMzV9.kTXgIDGjKOaQ5cB36o2D3wyV4UEA_w0R37OiKu4je70')
+      .end((error, res) => {
+        expect(res).to.have.status(419);
+        expect(res.body).to.be.an('object');
+        expect(res.body).to.have.property('error');
+        done();
+      });
+  });
+});
