@@ -22,6 +22,7 @@ const routes = (app) => {
   app.post(`${api}/auth/signup`, ValidateUser.validateSignupFormData, UsersController.signup);
   app.post(`${api}/auth/signin`, ValidateUser.validateSigninFormData, UsersController.signin);
   app.post(`${api}/trips`, Auth.authenticateAdmin, ValidateTrip.createTripForm, TripController.createTrip);
+  app.get(`${api}/trips`, Auth.authenticateUser, TripController.getTrips);
   app.get('/', (req, res) => ResponseHelper.success(res, 200, { message: 'Welcome to Way Farer' }));
   // invalid url
   app.all('*', (req, res) => ResponseHelper.error(res, 404, errorStrings.pageNotFound));

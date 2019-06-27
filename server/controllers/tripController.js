@@ -32,12 +32,27 @@ class UsersController {
       if (busScheduled) {
         return ResponseHelper.error(res, 409, errorStrings.busNotAvailable);
       }
-      const user_id = req.user.id;
-      const newTrip = await tripModel.createTripQuery(user_id, req.body);
+      const newTrip = await tripModel.createTripQuery(req.body);
       if (!newTrip) {
         throw new Error(errorStrings.serverError);
       }
       return ResponseHelper.success(res, 201, newTrip);
+    } catch (error) {
+      return ResponseHelper.error(res, 500, errorStrings.serverError);
+    }
+  }
+
+  /**
+   * Get all trips (for users and admin)
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} an array of objects containing all trips
+   */
+
+  static async getTrips(req, res) {
+    try {
+      const trips = await tripModel.getTrips();
+      return ResponseHelper.success(res, 200, trips);
     } catch (error) {
       return ResponseHelper.error(res, 500, errorStrings.serverError);
     }

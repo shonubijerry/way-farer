@@ -23,12 +23,12 @@ INSERT INTO bus (
 ('2222d3d7-9c27-4a3e-bcd0-b1ecf914e222', 'DD746KTU', 'TATA', 'X407', '2010', 44),
 ('3332d3d7-9c27-4a3e-bcd0-b1ecf914e629', 'AA492IKJ', 'TOYOTA', 'VALOR', '2010', 40);
 INSERT INTO trip (
-  id, user_id, bus_id, origin, destination, trip_date, fare, status
+  id, bus_id, origin, destination, trip_date, fare, status
 ) VALUES
-('aaac8272-4b57-423c-906f-3da93e823f49', '2e0785a9-3611-491f-951c-62f2fe4c320a', '1232d3d7-9c27-4a3e-bcd0-b1ecf914e123', 'Ikeja, Lagos', 'CMS, Lagos', '2019-04-02', 500.00, 'active'),
-('bbbc8272-4b57-423c-906f-3da93e823f49', '2e0785a9-3611-491f-951c-62f2fe4c320a', '1232d3d7-9c27-4a3e-bcd0-b1ecf914e123', 'Alausa, Lagos', 'Maryland, Lagos', '2019-06-26', 300.00, 'cancelled'),
-('ccc58272-4b57-423c-906f-3da93e823f49', '2e0785a9-3611-491f-951c-62f2fe4c320a', '2222d3d7-9c27-4a3e-bcd0-b1ecf914e222', 'Garki, Abuja', 'Hilton Drive, Abuja', '2019-05-30', 1000.00, 'active'),
-('dddc8272-4b57-423c-906f-3da93e823f49', '2e0785a9-3611-491f-951c-62f2fe4c320a', '1232d3d7-9c27-4a3e-bcd0-b1ecf914e123', 'Ikoyi, Lagos', 'Victoria Island, Lagos', '2019-01-20', 600.00, 'active');
+('aaac8272-4b57-423c-906f-3da93e823f49', '1232d3d7-9c27-4a3e-bcd0-b1ecf914e123', 'Ikeja, Lagos', 'CMS, Lagos', '2019-04-02', 500.00, 'active'),
+('bbbc8272-4b57-423c-906f-3da93e823f49', '1232d3d7-9c27-4a3e-bcd0-b1ecf914e123', 'Alausa, Lagos', 'Maryland, Lagos', '2019-06-26', 300.00, 'cancelled'),
+('ccc58272-4b57-423c-906f-3da93e823f49', '2222d3d7-9c27-4a3e-bcd0-b1ecf914e222', 'Garki, Abuja', 'Hilton Drive, Abuja', '2019-05-30', 1000.00, 'active'),
+('dddc8272-4b57-423c-906f-3da93e823f49', '1232d3d7-9c27-4a3e-bcd0-b1ecf914e123', 'Ikoyi, Lagos', 'Victoria Island, Lagos', '2019-01-20', 600.00, 'active');
 INSERT INTO booking (
   id, trip_id, user_id, seat_number
 ) VALUES
