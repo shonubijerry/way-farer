@@ -24,6 +24,7 @@ const errorStrings = {
   alreadyCancelled: 'Trip already cancelled',
   noTrip: 'Trip not found',
   validtripId: 'Enter a valid trip id',
+  validFilterValue: 'filter_value is not allowed to be empty',
 
   notAllowed: 'You are forbidden from accessing this section of the app',
   sessionExpired: 'Session expired, login again',

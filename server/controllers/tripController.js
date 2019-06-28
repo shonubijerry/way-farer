@@ -1,21 +1,21 @@
+import moment from 'moment';
 import TripModel from '../model/tripModel';
 import errorStrings from '../helpers/errorStrings';
 import ResponseHelper from '../helpers/responseHelper';
-
 
 const tripModel = new TripModel('trip');
 const busModel = new TripModel('bus');
 
 /**
 * @fileOverview - class manages all trip logic
-* @class - tripController
+* @class - TripController
 * @requires - ../model/tripsModel
 * @requires - ../helpers/errorStrings
 * @requires - ../helpers/responseHelper
-* @exports - usersController.js
+* @exports - TripController
 * */
 
-class UsersController {
+class TripController {
   /**
  * Create a trip (for admin only)
  * @param {object} req
@@ -36,6 +36,8 @@ class UsersController {
       if (!newTrip) {
         throw new Error(errorStrings.serverError);
       }
+      newTrip.created_on = moment(newTrip.created_on).format('llll');
+      newTrip.trip_date = moment(newTrip.trip_date).format('llll');
       return ResponseHelper.success(res, 201, newTrip);
     } catch (error) {
       return ResponseHelper.error(res, 500, errorStrings.serverError);
@@ -51,7 +53,13 @@ class UsersController {
 
   static async getTrips(req, res) {
     try {
-      const trips = await tripModel.getTrips();
+      let trips = [];
+      const { filter_by } = req.query;
+      if (filter_by) {
+        trips = await tripModel.getFilteredTrips(filter_by, req.body.filter_value);
+        return ResponseHelper.success(res, 200, trips);
+      }
+      trips = await tripModel.getTrips();
       return ResponseHelper.success(res, 200, trips);
     } catch (error) {
       return ResponseHelper.error(res, 500, errorStrings.serverError);
@@ -86,4 +94,4 @@ class UsersController {
   }
 }
 
-export default UsersController;
+export default TripController;

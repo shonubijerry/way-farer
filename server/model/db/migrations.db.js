@@ -7,7 +7,8 @@ pool.query(`DROP TABLE IF EXISTS users CASCADE;
     first_name VARCHAR(128),
     last_name VARCHAR(128),
     password VARCHAR NOT NULL,
-    is_admin BOOLEAN NOT NULL DEFAULT false
+    is_admin BOOLEAN NOT NULL DEFAULT false,
+    registered_on TIMESTAMP NOT NULL DEFAULT NOW()
   );
   DROP TABLE IF EXISTS bus CASCADE;
   CREATE TABLE bus(
@@ -16,7 +17,8 @@ pool.query(`DROP TABLE IF EXISTS users CASCADE;
     manufacturer VARCHAR(100) NOT NULL,
     model VARCHAR(100) NOT NULL,
     year VARCHAR(6) NOT NULL,
-    capacity SMALLINT NOT NULL
+    capacity SMALLINT NOT NULL,
+    created_on TIMESTAMP NOT NULL DEFAULT NOW()
   );
   DROP TABLE IF EXISTS trip CASCADE;
   CREATE TABLE trip(
@@ -24,7 +26,8 @@ pool.query(`DROP TABLE IF EXISTS users CASCADE;
     bus_id UUID NOT NULL,
     origin VARCHAR(100) NOT NULL,
     destination VARCHAR(100) NOT NULL,
-    trip_date VARCHAR(100) NOT NULL,
+    trip_date TIMESTAMP NOT NULL,
+    created_on TIMESTAMP NOT NULL DEFAULT NOW(),
     fare NUMERIC(10, 2) NOT NULL,
     status VARCHAR(10) NOT NULL DEFAULT 'active'
   );

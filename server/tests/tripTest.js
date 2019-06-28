@@ -199,11 +199,24 @@ describe('TRIP CONTROLLER', () => {
             done();
           });
       });
+
+      it('it should not create a trip if trip_date is in the past', (done) => {
+        chai.request(app)
+          .post(tripUrl)
+          .send(testData.trip[10])
+          .set('Authorization', currentToken)
+          .end((error, res) => {
+            expect(res).to.have.status(422);
+            expect(res.body).to.be.a('object');
+            expect(res.body).to.have.property('error');
+            done();
+          });
+      });
     });
   });
 
 
-  describe('GET ALL TRIPS', () => {
+  describe('GET TRIPS', () => {
     it('it should return authentication error', (done) => {
       chai.request(app)
         .get(tripUrl)
@@ -269,6 +282,69 @@ describe('TRIP CONTROLLER', () => {
             expect(res.body.data[0]).to.have.property('trip_date');
             expect(res.body.data[0]).to.have.property('fare');
             expect(res.body.data[0]).to.have.property('status');
+            done();
+          });
+      });
+
+      it('It should get all filtered trips', (done) => {
+        chai.request(app)
+          .get(`${tripUrl}?filter_by=origin`)
+          .set('Authorization', currentToken)
+          .send({ filter_value: 'Lagos' })
+          .end((error, res) => {
+            expect(res).to.have.status(200);
+            expect(res.body).to.be.a('object');
+            expect(res.body).to.have.property('data');
+            expect(res.body.data).to.be.a('array');
+            expect(res.body.data[0]).to.be.a('object');
+            expect(res.body.data[0]).to.have.property('id');
+            expect(res.body.data[0]).to.have.property('bus_id');
+            expect(res.body.data[0]).to.have.property('origin');
+            expect(res.body.data[0]).to.have.property('destination');
+            expect(res.body.data[0]).to.have.property('trip_date');
+            expect(res.body.data[0]).to.have.property('fare');
+            expect(res.body.data[0]).to.have.property('status');
+            done();
+          });
+      });
+      it('it should return empty data if query not matched any row', (done) => {
+        chai.request(app)
+          .get(`${tripUrl}?filter_by=origin`)
+          .set('Authorization', currentToken)
+          .send({ filter_value: 'Maiduguri' })
+          .end((error, res) => {
+            expect(res).to.have.status(200);
+            expect(res.body).to.be.a('object');
+            expect(res.body).to.have.property('status');
+            expect(res.body.status).to.equal('success');
+            expect(res.body).to.have.property('data');
+            expect(res.body.data).to.eql([]);
+            done();
+          });
+      });
+      it('it should not get trips if url is not a valid query', (done) => {
+        chai.request(app)
+          .get(`${tripUrl}?filter_by=original`)
+          .set('Authorization', currentToken)
+          .send({ filter_value: 'Maiduguri' })
+          .end((error, res) => {
+            expect(res).to.have.status(404);
+            expect(res.body).to.be.an('object');
+            expect(res.body).to.have.property('error');
+            expect(res.body.error).to.equal(errorStrings.pageNotFound);
+            done();
+          });
+      });
+      it('it should not get filtered trips with empty filter value', (done) => {
+        chai.request(app)
+          .get(`${tripUrl}?filter_by=origin`)
+          .set('Authorization', currentToken)
+          .send({ filter_value: '' })
+          .end((error, res) => {
+            expect(res).to.have.status(422);
+            expect(res.body).to.be.a('object');
+            expect(res.body).to.have.property('error');
+            expect(res.body.error).to.equal(errorStrings.validFilterValue);
             done();
           });
       });
