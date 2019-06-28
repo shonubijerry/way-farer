@@ -274,6 +274,124 @@ describe('TRIP CONTROLLER', () => {
       });
     });
   });
+  describe('CANCEL A TRIP', () => {
+    it('it should return authentication error', (done) => {
+      const tripId = 'aaac8272-4b57-423c-906f-3da93e823f49'; // active trip
+      chai.request(app)
+        .patch(`${tripUrl}/${tripId}`)
+        .end((error, res) => {
+          expect(res).to.have.status(401);
+          expect(res.body).to.be.a('object');
+          expect(res.body).to.have.property('error');
+          expect(res.body.error).to.equal(errorStrings.notAuthenticated);
+          done();
+        });
+    });
+    describe('403 Page forbidden', () => {
+      before((done) => {
+        chai.request(app)
+          .post(signinUrl)
+          .send({
+            email: 'adenekan2017@gmail.com', // this user is not an admin
+            password: 'olujac1$',
+          })
+          .end((error, res) => {
+            currentToken = res.body.data.token;
+            done();
+          });
+      });
+      it('it should not cancel a trip if user is not admin', (done) => {
+        const tripId = 'aaac8272-4b57-423c-906f-3da93e823f49'; // active trip
+        chai.request(app)
+          .patch(`${tripUrl}/${tripId}`)
+          .set('Authorization', currentToken)
+          .end((error, res) => {
+            expect(res).to.have.status(403);
+            expect(res.body).to.be.a('object');
+            expect(res.body).to.have.property('error');
+            expect(res.body.error).to.equal(errorStrings.notAllowed);
+            done();
+          });
+      });
+    });
+    describe('Cancel a trip for admin', () => {
+      before((done) => {
+        chai.request(app)
+          .post(signinUrl)
+          .send({
+            email: 'shonubijerry@gmail.com', // this user is not an admin
+            password: 'olujac1$',
+          })
+          .end((error, res) => {
+            currentToken = res.body.data.token;
+            done();
+          });
+      });
+      it('it should cancel a trip', (done) => {
+        const tripId = 'aaac8272-4b57-423c-906f-3da93e823f49'; // active trip
+        chai.request(app)
+          .patch(`${tripUrl}/${tripId}`)
+          .set('Authorization', currentToken)
+          .end((error, res) => {
+            expect(res).to.have.status(200);
+            expect(res.body).to.be.an('object');
+            expect(res.body).to.have.property('data');
+            expect(res.body.data).to.be.a('object');
+            expect(res.body.data).to.have.property('id');
+            expect(res.body.data).to.have.property('bus_id');
+            expect(res.body.data).to.have.property('origin');
+            expect(res.body.data).to.have.property('destination');
+            expect(res.body.data).to.have.property('trip_date');
+            expect(res.body.data).to.have.property('fare');
+            expect(res.body.data).to.have.property('status');
+            expect(res.body.data).to.have.property('message');
+            done();
+          });
+      });
+
+      it('it should not cancel a trip if trip is already cancelled', (done) => {
+        const tripId = 'bbbc8272-4b57-423c-906f-3da93e823f49'; // cancelled trip
+        chai.request(app)
+          .patch(`${tripUrl}/${tripId}`)
+          .set('Authorization', currentToken)
+          .end((error, res) => {
+            expect(res).to.have.status(202);
+            expect(res.body).to.be.an('object');
+            expect(res.body).to.have.property('error');
+            expect(res.body.error).to.equal(errorStrings.alreadyCancelled);
+            done();
+          });
+      });
+
+      it('it should not cancel a trip if it does not exist', (done) => {
+        const tripId = '344c8272-4b57-423c-906f-3da93e823f48'; // valid trip id
+        chai.request(app)
+          .patch(`${tripUrl}/${tripId}`)
+          .set('Authorization', currentToken)
+          .end((error, res) => {
+            expect(res).to.have.status(404);
+            expect(res.body).to.be.an('object');
+            expect(res.body).to.have.property('error');
+            expect(res.body.error).to.equal(errorStrings.noTrip);
+            done();
+          });
+      });
+
+      it('it should not cancel a trip if tripId is invalid', (done) => {
+        const tripId = '344c8272-4b57-423c-906f-3da93e823f48qw'; // invalid trip id
+        chai.request(app)
+          .patch(`${tripUrl}/${tripId}`)
+          .set('Authorization', currentToken)
+          .end((error, res) => {
+            expect(res).to.have.status(422);
+            expect(res.body).to.be.an('object');
+            expect(res.body).to.have.property('error');
+            expect(res.body.error).to.equal(errorStrings.validtripId);
+            done();
+          });
+      });
+    });
+  });
 });
 
 describe('Expired session', () => {
@@ -285,6 +403,7 @@ describe('Expired session', () => {
         expect(res).to.have.status(419);
         expect(res.body).to.be.an('object');
         expect(res.body).to.have.property('error');
+        expect(res.body.error).to.equal(errorStrings.sessionExpired);
         done();
       });
   });
@@ -298,6 +417,7 @@ describe('Expired session', () => {
         expect(res).to.have.status(419);
         expect(res.body).to.be.an('object');
         expect(res.body).to.have.property('error');
+        expect(res.body.error).to.equal(errorStrings.sessionExpired);
         done();
       });
   });
