@@ -52,7 +52,7 @@ class ValidateTrip {
     if (!filter_by) {
       return next();
     }
-    if (filter_by !== 'origin') {
+    if (filter_by !== 'origin' && filter_by !== 'destination') {
       return responseHelper.error(response, 404, errorStrings.pageNotFound);
     }
     const data = {

@@ -1,15 +1,16 @@
 # way-farer
 
 [![Build Status](https://travis-ci.com/shonubijerry/way-farer.svg?branch=develop)](https://travis-ci.com/shonubijerry/way-farer)
-[![Coverage Status](https://coveralls.io/repos/github/shonubijerry/way-farer/badge.svg?branch=develop)](https://coveralls.io/github/shonubijerry/way-farer?branch=develop)
-[![Maintainability](https://api.codeclimate.com/v1/badges/7868b6f9a95ab5b862bd/maintainability)](https://codeclimate.com/github/shonubijerry/way-farer/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/7868b6f9a95ab5b862bd/test_coverage)](https://codeclimate.com/github/shonubijerry/way-farer/test_coverage)
+[![Maintainability](https://api.codeclimate.com/v1/badges/7868b6f9a95ab5b862bd/maintainability)](https://codeclimate.com/github/shonubijerry/way-farer/maintainability)
+[![Coverage Status](https://coveralls.io/repos/github/shonubijerry/way-farer/badge.svg?branch=develop)](https://coveralls.io/github/shonubijerry/way-farer?branch=develop)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 
 WayFarer is a public bus transportation booking server.
 
 ## Pivotal Tracker Project
+https://www.pivotaltracker.com/n/projects/2358463
 
 ## Server side hosted on Heroku
 
@@ -79,16 +80,16 @@ e.g npm test
 
 <tr><td>GET</td> <td>/api/v1/trips</td>  <td>View all trips</td></tr>
 
-<tr><td>GET</td> <td>/api/v1/trips?origin=:origin</td>  <td>View trips by origin</td></tr>
+<tr><td>GET</td> <td>/api/v1/trips?filter_by=origin</td>  <td>View trips by origin</td></tr>
 
-<tr><td>GET</td> <td>/api/v1/trips?destination=:destination</td>  <td>View trips by destination</td></tr>
+<tr><td>GET</td> <td>/api/v1/trips?filter_by=destination</td>  <td>View trips by destination</td></tr>
 
 <tr><td>GET</td> <td>/api/v1/bookings</td>  <td>View all bookings</td></tr>
 
+<tr><td>PATCH</td> <td>/api/v1/trips/:tripId</td>  <td>Cancel a trip</td></tr>
+
 <tr><td>DELETE</td> <td>/api/v1/bookings/:bookingId</td>  <td>Delete a booking</td></tr>
 
-<tr><td>PATCH</td> <td>/api/v1/trips/:tripId</td>  <td>Cancel a trip</td></tr>
- 
 </table>
 
 
