@@ -15,7 +15,7 @@
     "seeder": "DEBUG=app/seeder babel-node ./server/model/db/seed.db",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "coveralls": "nyc --reporter=lcov --reporter=text-lcov npm test",
-    "exec-db-production": "NODE_ENV=development npm run migration && npm run build",
+    "exec-db-production": "npm run build && NODE_ENV=production npm run migration",
     "migration": "node ./dist/model/db/migrations.db",
     "heroku-postbuild": "NODE_ENV=production npm run exec-db-production"
   },
