@@ -24,16 +24,45 @@ class ValidateTrip {
    * @callback {Function} next
    * @return {Object} error
    */
-  static createTripForm(request, response, next) {
+  static validateCreateTrip(request, response, next) {
     const createTripSchema = Joi.object().keys({
       bus_id: validId.error(new Error(errorStrings.validBusId)),
       origin: Joi.string().required(),
       destination: Joi.string().required(),
-      trip_date: Joi.date().iso().required(),
+      trip_date: Joi.date().iso().greater(new Date().toLocaleString()).required(),
       fare: Joi.number().precision(2).required(),
     });
 
     const error = Validator.validateJoi(request.body, createTripSchema);
+    if (!error) {
+      return next();
+    }
+    return responseHelper.error(response, 422, error);
+  }
+
+  /**
+ * validate get trip query
+ * @param {Object} request
+ * @param {Object} response
+ * @callback {Function} next
+ * @return {Object} error
+ */
+  static validateGetTrip(request, response, next) {
+    const { filter_by } = request.query;
+    if (!filter_by) {
+      return next();
+    }
+    if (filter_by !== 'origin') {
+      return responseHelper.error(response, 404, errorStrings.pageNotFound);
+    }
+    const data = {
+      filter_value: request.body.filter_value,
+    };
+    const getTripSchema = Joi.object().keys({
+      filter_value: Joi.string().required(),
+    });
+
+    const error = Validator.validateJoi(data, getTripSchema);
     if (!error) {
       return next();
     }
@@ -47,7 +76,7 @@ class ValidateTrip {
  * @callback {Function} next
  * @return {Object} error
  */
-  static cancelTripParam(request, response, next) {
+  static validateCancelTrip(request, response, next) {
     const cancelTripSchema = Joi.object().keys({
       tripId: validId.error(new Error(errorStrings.validtripId)),
     });

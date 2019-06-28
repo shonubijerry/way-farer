@@ -1,7 +1,5 @@
 import uuid from 'uuid';
-import moment from 'moment';
 import Model from './model';
-
 
 /**
 * @fileOverview - class manages all trip data storage
@@ -22,12 +20,11 @@ class TripModel extends Model {
     bus_id, origin, destination, trip_date, fare,
   }) {
     try {
-      const formatted_date = moment(trip_date).format('llll');
       const id = uuid();
       const { rows } = await this.insert(
         'id, bus_id, origin, destination, trip_date, fare', '$1, $2, $3, $4, $5, $6',
         [
-          id, bus_id, origin, destination, formatted_date, fare,
+          id, bus_id, origin, destination, trip_date, fare,
         ],
       );
       return rows[0];
@@ -44,6 +41,20 @@ class TripModel extends Model {
   async getTrips() {
     try {
       const { rows } = await this.select('*');
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  /**
+     * Get filtered trips
+     * @returns {object} an object with all trips
+     */
+
+  async getFilteredTrips(filter_by, filter_value) {
+    try {
+      const { rows } = await this.selectWhere('*', `LOWER(${filter_by}) LIKE LOWER('%${filter_value}%')`);
       return rows;
     } catch (error) {
       throw error;
