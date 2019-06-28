@@ -286,11 +286,33 @@ describe('TRIP CONTROLLER', () => {
           });
       });
 
-      it('It should get all filtered trips', (done) => {
+      it('It should get all filtered trips by origin', (done) => {
         chai.request(app)
           .get(`${tripUrl}?filter_by=origin`)
           .set('Authorization', currentToken)
           .send({ filter_value: 'Lagos' })
+          .end((error, res) => {
+            expect(res).to.have.status(200);
+            expect(res.body).to.be.a('object');
+            expect(res.body).to.have.property('data');
+            expect(res.body.data).to.be.a('array');
+            expect(res.body.data[0]).to.be.a('object');
+            expect(res.body.data[0]).to.have.property('id');
+            expect(res.body.data[0]).to.have.property('bus_id');
+            expect(res.body.data[0]).to.have.property('origin');
+            expect(res.body.data[0]).to.have.property('destination');
+            expect(res.body.data[0]).to.have.property('trip_date');
+            expect(res.body.data[0]).to.have.property('fare');
+            expect(res.body.data[0]).to.have.property('status');
+            done();
+          });
+      });
+
+      it('It should get all filtered trips by destination', (done) => {
+        chai.request(app)
+          .get(`${tripUrl}?filter_by=destination`)
+          .set('Authorization', currentToken)
+          .send({ filter_value: 'Abuja' })
           .end((error, res) => {
             expect(res).to.have.status(200);
             expect(res.body).to.be.a('object');
