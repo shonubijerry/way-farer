@@ -17,7 +17,7 @@ const busModel = new TripModel('bus');
 
 class UsersController {
   /**
- * Create a trip
+ * Create a trip (for admin only)
  * @param {object} req
  * @param {object} res
  */
@@ -53,6 +53,33 @@ class UsersController {
     try {
       const trips = await tripModel.getTrips();
       return ResponseHelper.success(res, 200, trips);
+    } catch (error) {
+      return ResponseHelper.error(res, 500, errorStrings.serverError);
+    }
+  }
+
+  /**
+   * Cancel a particular trip (admin only)
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} response object
+   */
+
+  static async cancelTrip(req, res) {
+    try {
+      const cancelledTrip = await tripModel.cancelTrip(req.params.tripId);
+      switch (cancelledTrip) {
+        case 'no-trip': {
+          return ResponseHelper.error(res, 404, errorStrings.noTrip);
+        }
+        case 'already-cancelled': {
+          return ResponseHelper.error(res, 202, errorStrings.alreadyCancelled);
+        }
+        default: {
+          cancelledTrip.message = 'Trip cancelled successfully';
+          return ResponseHelper.success(res, 200, cancelledTrip);
+        }
+      }
     } catch (error) {
       return ResponseHelper.error(res, 500, errorStrings.serverError);
     }

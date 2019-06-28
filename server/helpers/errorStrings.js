@@ -20,6 +20,10 @@ const errorStrings = {
   validDestination: 'destination is not allowed to be empty',
   validTripDate: 'trip_date must be a valid ISO 8601 date',
   validFare: 'fare must be a number',
+  tripNotCanceled: 'Trip was not cancelled',
+  alreadyCancelled: 'Trip already cancelled',
+  noTrip: 'Trip not found',
+  validtripId: 'Enter a valid trip id',
 
   notAllowed: 'You are forbidden from accessing this section of the app',
   sessionExpired: 'Session expired, login again',

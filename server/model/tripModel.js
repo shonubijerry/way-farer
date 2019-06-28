@@ -51,6 +51,28 @@ class TripModel extends Model {
   }
 
   /**
+   * Query to cancel a particular trip
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} response object
+   */
+
+  async cancelTrip(tripId) {
+    try {
+      const trip = await this.selectWhere('*', 'id=$1', [tripId]);
+      if (!trip.rows[0]) {
+        return 'no-trip';
+      } if (trip.rows[0].status === 'cancelled') {
+        return 'already-cancelled';
+      }
+      const { rows } = await this.update('status=$1', 'id=$2', ['cancelled', tripId]);
+      return rows[0];
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  /**
  * Check if a bus has been assigned to another trip already
  * A bus can be available if it has no active trip
  * @param {string} bus_id
