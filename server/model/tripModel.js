@@ -84,6 +84,26 @@ class TripModel extends Model {
   }
 
   /**
+   * Get bus capacity, bus id, and trip date using trip_id
+   * @param {object} trip_id
+   * @returns {object}
+   */
+
+  async getTripInformationQuery(trip_id) {
+    try {
+      const { rows } = await this.selectWithJoin(
+        'bus.capacity, bus_id, trip_date',
+        'JOIN bus ON (trip.bus_id = bus.id)',
+        'trip.id=$1',
+        [trip_id],
+      );
+      return rows[0];
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  /**
  * Check if a bus has been assigned to another trip already
  * A bus can be available if it has no active trip
  * @param {string} bus_id

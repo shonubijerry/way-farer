@@ -45,7 +45,7 @@ class Model {
     }
   }
 
-  async selectWithJoin(columns, selectors, joinStatement, values) {
+  async selectWithJoin(columns, joinStatement, selectors, values) {
     const queryString = `SELECT ${columns} FROM ${this.table} ${joinStatement}
      WHERE ${selectors} `;
     debug('app/debug')(queryString);

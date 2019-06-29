@@ -484,7 +484,7 @@ describe('TRIP CONTROLLER', () => {
             expect(res).to.have.status(422);
             expect(res.body).to.be.an('object');
             expect(res.body).to.have.property('error');
-            expect(res.body.error).to.equal(errorStrings.validtripId);
+            expect(res.body.error).to.equal(errorStrings.validTripId);
             done();
           });
       });

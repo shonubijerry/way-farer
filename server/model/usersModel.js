@@ -69,6 +69,21 @@ class UsersModel extends Model {
       throw error;
     }
   }
+
+  /**
+    * Find a user by id
+    * @param {String} id
+    * @return boolean
+    */
+
+  async findUserById(id) {
+    try {
+      const { rows } = await this.selectWhere('*', 'id=$1', [id]);
+      return rows[0];
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 export default UsersModel;

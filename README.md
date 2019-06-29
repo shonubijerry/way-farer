@@ -13,6 +13,7 @@ WayFarer is a public bus transportation booking server.
 https://www.pivotaltracker.com/n/projects/2358463
 
 ## Server side hosted on Heroku
+https://way-farer-shonubi.herokuapp.com
 
 ## Table of Content
  * [Getting Started](#getting-started)
