@@ -2,17 +2,21 @@ import ResponseHelper from '../helpers/responseHelper';
 import errorStrings from '../helpers/errorStrings';
 import ValidateUser from '../middleware/ValidateUser';
 import ValidateTrip from '../middleware/validateTrip';
+import ValidateBooking from '../middleware/validateBooking';
 import Auth from '../middleware/Auth';
 import UsersController from '../controllers/usersController';
 import TripController from '../controllers/tripController';
+import BookingController from '../controllers/bookingController';
 
 /**
  * @fileOverview This file manages all routes in the application
  * @requires ../helpers/responseHelper
  * @requires ../helpers/errorStrings
  * @requires ../middleware/ValidateUser
+ * @requires ../middleware/validateBooking
  * @requires ../middleware/Auth
  * @requires ../controllers/usersController
+ * @requires ../controllers/bookingController
  * @param {object} app
  * @exports routes.js
  */
@@ -22,6 +26,7 @@ const routes = (app) => {
   app.post(`${api}/auth/signup`, ValidateUser.validateSignupFormData, UsersController.signup);
   app.post(`${api}/auth/signin`, ValidateUser.validateSigninFormData, UsersController.signin);
   app.post(`${api}/trips`, Auth.authenticateAdmin, ValidateTrip.validateCreateTrip, TripController.createTrip);
+  app.post(`${api}/bookings`, Auth.authenticateUser, ValidateBooking.validateCreateBooking, BookingController.createBooking);
   app.get(`${api}/trips`, Auth.authenticateUser, ValidateTrip.validateGetTrip, TripController.getTrips);
   app.get(`${api}/trips?filter_by=origin`, Auth.authenticateUser, ValidateTrip.validateGetTrip, TripController.getTrips);
   app.get(`${api}/trips?filter_by=destination`, Auth.authenticateUser, ValidateTrip.validateGetTrip, TripController.getTrips);

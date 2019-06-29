@@ -78,7 +78,7 @@ class ValidateTrip {
  */
   static validateCancelTrip(request, response, next) {
     const cancelTripSchema = Joi.object().keys({
-      tripId: validId.error(new Error(errorStrings.validtripId)),
+      tripId: validId.error(new Error(errorStrings.validTripId)),
     });
 
     const error = Validator.validateJoi({ tripId: request.params.tripId }, cancelTripSchema);

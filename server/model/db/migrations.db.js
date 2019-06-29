@@ -37,7 +37,7 @@ pool.query(`DROP TABLE IF EXISTS users CASCADE;
     trip_id UUID NOT NULL,
     user_id UUID NOT NULL,
     seat_number SMALLINT NOT NULL,
-    created_on DATE NOT NULL DEFAULT CURRENT_DATE
+    created_on TIMESTAMP NOT NULL DEFAULT NOW()
   );
 `).then(() => {
   pool.end();
