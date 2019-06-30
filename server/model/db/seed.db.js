@@ -27,7 +27,7 @@ INSERT INTO trip (
 ('aaac8272-4b57-423c-906f-3da93e823f49', '1232d3d7-9c27-4a3e-bcd0-b1ecf914e123', 'Ikeja, Lagos', 'CMS, Lagos', 'Sat, Feb 29, 2020 6:49 PM', 500.00, 'active', 'Mon, Feb 28, 2019 6:49 PM'),
 ('bbbc8272-4b57-423c-906f-3da93e823f49', '1232d3d7-9c27-4a3e-bcd0-b1ecf914e123', 'Alausa, Lagos', 'Maryland, Lagos', 'Sat, Feb 29, 2020 6:49 PM', 300.00, 'cancelled', 'Mon, Feb 28, 2019 6:49 PM'),
 ('ccc58272-4b57-423c-906f-3da93e823f49', '1232d3d7-9c27-4a3e-bcd0-b1ecf914e123', 'Garki, Abuja', 'Hilton Drive, Abuja', 'Sat, Feb 29, 2020 6:49 PM', 1000.00, 'active', 'Mon, Feb 28, 2019 6:49 PM'),
-('dddc8272-4b57-423c-906f-3da93e823f49', '1232d3d7-9c27-4a3e-bcd0-b1ecf914e123', 'Ikoyi, Lagos', 'Victoria Island, Lagos', 'Sun, Jun 30, 2019 1:49 AM', 600.00, 'active', 'Mon, Feb 28, 2019 6:49 PM');
+('dddc8272-4b57-423c-906f-3da93e823f49', '1232d3d7-9c27-4a3e-bcd0-b1ecf914e123', 'Ikoyi, Lagos', 'Victoria Island, Lagos', 'Mon, Mar 04, 2019 1:49 AM', 600.00, 'active', 'Mon, Feb 28, 2019 6:49 PM');
 INSERT INTO booking (
   id, trip_id, user_id, seat_number, created_on
 ) VALUES
