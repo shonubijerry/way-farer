@@ -32,12 +32,12 @@ class TripController {
       if (busScheduled) {
         return ResponseHelper.error(res, 409, errorStrings.busNotAvailable);
       }
-      const newTrip = await tripModel.createTripQuery(req.body);
+      const created_on = moment().format('llll');
+      const trip_date = moment(req.body.trip_date).format('llll');
+      const newTrip = await tripModel.createTripQuery(req.body, trip_date, created_on);
       if (!newTrip) {
         throw new Error(errorStrings.serverError);
       }
-      newTrip.created_on = moment(newTrip.created_on).format('llll');
-      newTrip.trip_date = moment(newTrip.trip_date).format('llll');
       return ResponseHelper.success(res, 201, newTrip);
     } catch (error) {
       return ResponseHelper.error(res, 500, errorStrings.serverError);

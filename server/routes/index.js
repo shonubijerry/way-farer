@@ -27,6 +27,7 @@ const routes = (app) => {
   app.post(`${api}/auth/signin`, ValidateUser.validateSigninFormData, UsersController.signin);
   app.post(`${api}/trips`, Auth.authenticateAdmin, ValidateTrip.validateCreateTrip, TripController.createTrip);
   app.post(`${api}/bookings`, Auth.authenticateUser, ValidateBooking.validateCreateBooking, BookingController.createBooking);
+  app.get(`${api}/bookings`, Auth.authenticateUser, BookingController.getBookings);
   app.get(`${api}/trips`, Auth.authenticateUser, ValidateTrip.validateGetTrip, TripController.getTrips);
   app.get(`${api}/trips?filter_by=origin`, Auth.authenticateUser, ValidateTrip.validateGetTrip, TripController.getTrips);
   app.get(`${api}/trips?filter_by=destination`, Auth.authenticateUser, ValidateTrip.validateGetTrip, TripController.getTrips);

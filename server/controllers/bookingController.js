@@ -1,12 +1,10 @@
 import moment from 'moment';
 import BookingModel from '../model/bookingModel';
-import UsersModel from '../model/usersModel';
 import TripModel from '../model/tripModel';
 import errorStrings from '../helpers/errorStrings';
 import ResponseHelper from '../helpers/responseHelper';
 
 const bookingModel = new BookingModel('booking');
-const usersModel = new UsersModel('users');
 const tripModel = new TripModel('trip');
 
 /**
@@ -30,35 +28,47 @@ class BookingController {
   static async createBooking(req, res) {
     try {
       const { trip_id } = req.body;
-      const { first_name, last_name, email } = await usersModel.findUserById(req.user.id);
 
-      // get bus capacity, bus id, and trip date
+      // get bus capacity, bus id, trip date, and status
       const tripInfo = await tripModel.getTripInformationQuery(trip_id);
       if (!tripInfo) {
         return ResponseHelper.error(res, 404, errorStrings.noTrip);
       }
-
+      if (tripInfo.status === 'cancelled') {
+        return ResponseHelper.error(res, 409, errorStrings.cancelledTrip);
+      }
+      const isPastTrip = moment().isAfter(moment(tripInfo.trip_date, 'llll'));
+      if (isPastTrip) {
+        return ResponseHelper.error(res, 409, errorStrings.pastTrip);
+      }
       const seat_number = await BookingController.getAvailableSeatNumber(trip_id, tripInfo.capacity);
-
-      const newBooking = await bookingModel.createBookingQuery(req.user.id, trip_id, seat_number);
+      const created_on = moment().format('llll');
+      const newBooking = await bookingModel.createBookingQuery(req.user.id, trip_id, seat_number, created_on);
       if (!newBooking) {
         throw new Error('');
       }
-      const booking = {
-        booking_id: newBooking.id,
-        user_id: req.user.id,
-        trip_id,
-        bus_id: tripInfo.bus_id,
-        trip_date: moment(tripInfo.trip_date).format('llll'),
-        seat_number,
-        first_name,
-        last_name,
-        email,
-        created_on: moment(newBooking.created_on).format('llll'),
-      };
-      return ResponseHelper.success(res, 201, booking);
+      const booking = await bookingModel.getBookingById(newBooking.id);
+      return ResponseHelper.success(res, 201, booking[0]);
     } catch (error) {
       return ResponseHelper.error(res, 500, errorStrings.serverError);
+    }
+  }
+
+  /**
+     * Get bookings (for users and admin)
+     * @param {object} req
+     * @param {object} res
+     * @returns {object} return all user's bookings or all bookings if admin
+     */
+
+  static async getBookings(req, res) {
+    try {
+      const bookings = await bookingModel.getBookingsQuery(req.user.id, req.user.is_admin);
+
+      return ResponseHelper.success(res, 200, bookings);
+    } catch (error) {
+      // return ResponseHelper.error(res, 500, errorStrings.serverError);
+      return ResponseHelper.error(res, 500, error.message);
     }
   }
 
@@ -75,8 +85,6 @@ class BookingController {
       // get already booked seats for this trip
       let bookedSeats = await bookingModel.getBookedSeats(trip_id);
       bookedSeats = bookedSeats.map(x => x.seat_number);
-
-      // bookedSeats = bookedSeats.length > 0 ? bookedSeats.map(x => x.seat_number) : [];
 
       // the differece of arrays busSeats and bookedSeats gives availableSeats
       const availableSeats = busSeats.filter(x => !bookedSeats.includes(x));

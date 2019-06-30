@@ -21,14 +21,14 @@ class UsersModel extends Model {
 
   async signupQuery({
     email, first_name, last_name, password,
-  }) {
+  }, registered_on) {
     const hashedPassword = passwordHelper.passwordHash(password);
     const id = uuid();
     try {
       const { rows } = await this.insert(
-        'id, email, first_name, last_name, password', '$1, $2, $3, $4, $5',
+        'id, email, first_name, last_name, password, registered_on', '$1, $2, $3, $4, $5, $6',
         [
-          id, email, first_name, last_name, hashedPassword,
+          id, email, first_name, last_name, hashedPassword, registered_on,
         ],
       );
       return rows[0];
