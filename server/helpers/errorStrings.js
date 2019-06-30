@@ -22,6 +22,8 @@ const errorStrings = {
   validFare: 'fare must be a number',
   tripNotCanceled: 'Trip was not cancelled',
   alreadyCancelled: 'Trip already cancelled',
+  cancelledTrip: 'You cannot post booking for cancelled trip',
+  pastTrip: 'You cannot post booking for past trip',
   noTrip: 'Trip not found',
   validTripId: 'Enter a valid trip id',
   validFilterValue: 'filter_value is not allowed to be empty',

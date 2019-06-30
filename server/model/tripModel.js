@@ -17,14 +17,14 @@ class TripModel extends Model {
    */
 
   async createTripQuery({
-    bus_id, origin, destination, trip_date, fare,
-  }) {
+    bus_id, origin, destination, fare,
+  }, trip_date, created_on) {
     try {
       const id = uuid();
       const { rows } = await this.insert(
-        'id, bus_id, origin, destination, trip_date, fare', '$1, $2, $3, $4, $5, $6',
+        'id, bus_id, origin, destination, trip_date, fare, created_on', '$1, $2, $3, $4, $5, $6, $7',
         [
-          id, bus_id, origin, destination, trip_date, fare,
+          id, bus_id, origin, destination, trip_date, fare, created_on,
         ],
       );
       return rows[0];
@@ -84,7 +84,7 @@ class TripModel extends Model {
   }
 
   /**
-   * Get bus capacity, bus id, and trip date using trip_id
+   * Get bus capacity, bus id, trip date, and status using trip_id
    * @param {object} trip_id
    * @returns {object}
    */
@@ -92,7 +92,7 @@ class TripModel extends Model {
   async getTripInformationQuery(trip_id) {
     try {
       const { rows } = await this.selectWithJoin(
-        'bus.capacity, bus_id, trip_date',
+        'bus.capacity, bus_id, trip_date, status',
         'JOIN bus ON (trip.bus_id = bus.id)',
         'trip.id=$1',
         [trip_id],

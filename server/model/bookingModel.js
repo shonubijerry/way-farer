@@ -16,13 +16,13 @@ class BookingModel extends Model {
    * @returns {object} user
    */
 
-  async createBookingQuery(user_id, trip_id, seat_number) {
+  async createBookingQuery(user_id, trip_id, seat_number, created_on) {
     try {
       const id = uuid();
       const { rows } = await this.insert(
-        'id, user_id, trip_id, seat_number', '$1, $2, $3, $4',
+        'id, user_id, trip_id, seat_number, created_on', '$1, $2, $3, $4, $5',
         [
-          id, user_id, trip_id, seat_number,
+          id, user_id, trip_id, seat_number, created_on,
         ],
       );
       return rows[0];
@@ -32,9 +32,57 @@ class BookingModel extends Model {
   }
 
   /**
-   * Add new booking to database
+     * Get bookings
+     * @param {object} email
+     * @returns {object} an object with all loans
+     */
+
+  async getBookingsQuery(user_id, is_admin) {
+    try {
+      if (is_admin) {
+        const { rows } = await this.selectWithJoin(
+          'booking.id as booking_id, user_id, trip_id, bus_id, trip_date, seat_number, first_name, last_name, email, booking.created_on',
+          'JOIN trip ON (booking.trip_id = trip.id) JOIN users ON (booking.user_id = users.id)',
+          'true',
+        );
+        return rows;
+      }
+      const { rows } = await this.selectWithJoin(
+        'booking.id as booking_id, user_id, trip_id, bus_id, trip_date, seat_number, first_name, last_name, email, booking.created_on',
+        'JOIN trip ON (booking.trip_id = trip.id) JOIN users ON (booking.user_id = users.id)',
+        'booking.user_id=$1',
+        [user_id],
+      );
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  /**
+     * Get bookings by id
+     * @param {object} email
+     * @returns {object} an object with all loans
+     */
+
+  async getBookingById(booking_id) {
+    try {
+      const { rows } = await this.selectWithJoin(
+        'booking.id as booking_id, user_id, trip_id, bus_id, trip_date, seat_number, first_name, last_name, email, booking.created_on',
+        'JOIN trip ON (booking.trip_id = trip.id) JOIN users ON (booking.user_id = users.id)',
+        'booking.id=$1',
+        [booking_id],
+      );
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  /**
+   * Get already booked seat_numbers for a particular trip
    * @param {object} req
-   * @returns {object} user
+   * @returns {object} booked seat numbers
    */
 
   async getBookedSeats(trip_id) {
