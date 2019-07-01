@@ -29,6 +29,7 @@ const errorStrings = {
   validFilterValue: 'filter_value is not allowed to be empty',
   validBookingId: 'Enter a valid booking id',
   bookingNotFound: 'Booking not found',
+  invalidSeatNumber: 'seat_number must be a number',
 
   notAllowed: 'You are forbidden from accessing this section of the app',
   sessionExpired: 'Session expired, login again',
