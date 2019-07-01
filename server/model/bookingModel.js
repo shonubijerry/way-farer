@@ -80,6 +80,31 @@ class BookingModel extends Model {
   }
 
   /**
+     * Delete a specific booking by booking_id
+     * @param {string} user_id
+     * @param {string} booking_id
+     * @returns {object} an object with all loans
+     */
+
+  async deleteBookingQuery({ id, is_admin }, booking_id) {
+    try {
+      let bookingExists = {};
+      if (is_admin) {
+        bookingExists = await this.selectWhere('*', 'id=$1', [booking_id]);
+      } else {
+        bookingExists = await this.selectWhere('*', 'user_id=$1 and id=$2', [id, booking_id]);
+      }
+      if (!bookingExists.rows[0]) {
+        return 'not-found';
+      }
+      const result = await this.deleteWhere('id=$1', [booking_id]);
+      return result.rowCount;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  /**
    * Get already booked seat_numbers for a particular trip
    * @param {object} req
    * @returns {object} booked seat numbers

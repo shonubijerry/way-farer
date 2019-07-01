@@ -32,6 +32,7 @@ const routes = (app) => {
   app.get(`${api}/trips?filter_by=origin`, Auth.authenticateUser, ValidateTrip.validateGetTrip, TripController.getTrips);
   app.get(`${api}/trips?filter_by=destination`, Auth.authenticateUser, ValidateTrip.validateGetTrip, TripController.getTrips);
   app.patch(`${api}/trips/:tripId`, Auth.authenticateAdmin, ValidateTrip.validateCancelTrip, TripController.cancelTrip);
+  app.delete(`${api}/bookings/:bookingId`, Auth.authenticateUser, ValidateBooking.validateDeleteBooking, BookingController.deleteBooking);
   app.get('/', (req, res) => ResponseHelper.success(res, 200, { message: 'Welcome to Way Farer' }));
   // invalid url
   app.all('*', (req, res) => ResponseHelper.error(res, 404, errorStrings.pageNotFound));

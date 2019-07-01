@@ -24,10 +24,11 @@ const errorStrings = {
   alreadyCancelled: 'Trip already cancelled',
   cancelledTrip: 'You cannot post booking for cancelled trip',
   pastTrip: 'You cannot post booking for past trip',
-  noTrip: 'Trip not found',
+  tripNotFound: 'Trip not found',
   validTripId: 'Enter a valid trip id',
   validFilterValue: 'filter_value is not allowed to be empty',
   validBookingId: 'Enter a valid booking id',
+  bookingNotFound: 'Booking not found',
 
   notAllowed: 'You are forbidden from accessing this section of the app',
   sessionExpired: 'Session expired, login again',

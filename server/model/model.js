@@ -67,6 +67,17 @@ class Model {
       throw err;
     }
   }
+
+  async deleteWhere(selector, values) {
+    const queryString = `DELETE FROM ${this.table} WHERE ${selector}`;
+    debug('app/debug')(queryString);
+    try {
+      const response = await this.pool.query(queryString, values);
+      return response;
+    } catch (err) {
+      throw err;
+    }
+  }
 }
 
 export default Model;

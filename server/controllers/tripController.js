@@ -78,7 +78,7 @@ class TripController {
       const cancelledTrip = await tripModel.cancelTrip(req.params.tripId);
       switch (cancelledTrip) {
         case 'no-trip': {
-          return ResponseHelper.error(res, 404, errorStrings.noTrip);
+          return ResponseHelper.error(res, 404, errorStrings.tripNotFound);
         }
         case 'already-cancelled': {
           return ResponseHelper.error(res, 202, errorStrings.alreadyCancelled);

@@ -35,6 +35,25 @@ class ValidateBooking {
     }
     return responseHelper.error(response, 422, error);
   }
+
+  /**
+   * validate delete booking endpoint params
+   * @param {Object} request
+   * @param {Object} response
+   * @callback {Function} next
+   * @return {Object} error
+   */
+  static validateDeleteBooking(request, response, next) {
+    const createBookingSchema = Joi.object().keys({
+      bookingId: validId.error(new Error(errorStrings.validBookingId)),
+    });
+
+    const error = Validator.validateJoi(request.params, createBookingSchema);
+    if (!error) {
+      return next();
+    }
+    return responseHelper.error(response, 422, error);
+  }
 }
 
 export default ValidateBooking;
