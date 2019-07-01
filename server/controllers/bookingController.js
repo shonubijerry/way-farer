@@ -10,6 +10,7 @@ const tripModel = new TripModel('trip');
 /**
 * @fileOverview - class manages all booking logic
 * @class - BookingController
+* @requires - moment
 * @requires - ../model/bookingsModel
 * @requires - ../model/usersModel
 * @requires - ../model/busModel
@@ -32,7 +33,7 @@ class BookingController {
       // get bus capacity, bus id, trip date, and status
       const tripInfo = await tripModel.getTripInformationQuery(trip_id);
       if (!tripInfo) {
-        return ResponseHelper.error(res, 404, errorStrings.noTrip);
+        return ResponseHelper.error(res, 404, errorStrings.tripNotFound);
       }
       if (tripInfo.status === 'cancelled') {
         return ResponseHelper.error(res, 409, errorStrings.cancelledTrip);
@@ -67,8 +68,29 @@ class BookingController {
 
       return ResponseHelper.success(res, 200, bookings);
     } catch (error) {
-      // return ResponseHelper.error(res, 500, errorStrings.serverError);
-      return ResponseHelper.error(res, 500, error.message);
+      return ResponseHelper.error(res, 500, errorStrings.serverError);
+    }
+  }
+
+  /**
+     * Delete a specific booking using its id
+     * @param {object} req
+     * @param {object} res
+     * @returns {object}
+     */
+
+  static async deleteBooking(req, res) {
+    try {
+      const deletedBooking = await bookingModel.deleteBookingQuery(req.user, req.params.bookingId);
+      if (deletedBooking === 'not-found') {
+        return ResponseHelper.error(res, 404, errorStrings.bookingNotFound);
+      }
+      if (!deletedBooking) {
+        throw new Error('');
+      }
+      return ResponseHelper.success(res, 200, { message: 'Booking deleted successfully' });
+    } catch (error) {
+      return ResponseHelper.error(res, 500, errorStrings.serverError);
     }
   }
 

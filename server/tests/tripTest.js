@@ -40,7 +40,7 @@ describe('TRIP CONTROLLER', () => {
             done();
           });
       });
-      it('it should not get the loan if user is not admin', (done) => {
+      it('it should not post a trip if user is not admin', (done) => {
         chai.request(app)
           .post(tripUrl)
           .send(testData.trip[0])
@@ -470,7 +470,7 @@ describe('TRIP CONTROLLER', () => {
             expect(res).to.have.status(404);
             expect(res.body).to.be.an('object');
             expect(res.body).to.have.property('error');
-            expect(res.body.error).to.equal(errorStrings.noTrip);
+            expect(res.body.error).to.equal(errorStrings.tripNotFound);
             done();
           });
       });

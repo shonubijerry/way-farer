@@ -103,7 +103,7 @@ describe('BOOKING CONTROLLER', () => {
           expect(res).to.have.status(404);
           expect(res.body).to.be.a('object');
           expect(res.body).to.have.property('error');
-          expect(res.body.error).to.equal(errorStrings.noTrip);
+          expect(res.body.error).to.equal(errorStrings.tripNotFound);
           done();
         });
     });
@@ -186,6 +186,89 @@ describe('BOOKING CONTROLLER', () => {
             expect(res.body.data[0]).to.have.property('last_name');
             expect(res.body.data[0]).to.have.property('email');
             expect(res.body.data[0]).to.have.property('created_on');
+            done();
+          });
+      });
+    });
+  });
+
+  describe('DELETE A BOOKING', () => {
+    it('it should return authentication error', (done) => {
+      chai.request(app)
+        .get(bookingUrl)
+        .end((error, res) => {
+          expect(res).to.have.status(401);
+          expect(res.body).to.be.a('object');
+          expect(res.body).to.have.property('error');
+          expect(res.body.error).to.equal(errorStrings.notAuthenticated);
+          done();
+        });
+    });
+
+    describe('User should delete a booking', () => {
+      before((done) => {
+        chai.request(app)
+          .post(signinUrl)
+          .send({
+            email: 'ciromalapai@hotmail.com', // this user is not an admin
+            password: 'olujac1$',
+          })
+          .end((error, res) => {
+            currentToken = res.body.data.token;
+            done();
+          });
+      });
+
+      it('It should delete a booking', (done) => {
+        chai.request(app)
+          .delete(`${bookingUrl}/abcc8272-4b57-423c-906f-3da93e823f66`)
+          .set('Authorization', currentToken)
+          .end((error, res) => {
+            expect(res).to.have.status(200);
+            expect(res.body).to.be.a('object');
+            expect(res.body).to.have.property('data');
+            expect(res.body.data).to.be.a('object');
+            expect(res.body.data).to.have.property('message');
+            expect(res.body.data.message).to.equal('Booking deleted successfully');
+            done();
+          });
+      });
+
+      it('It should not delete a non-existence booking', (done) => {
+        chai.request(app)
+          .delete(`${bookingUrl}/23368272-4b57-423c-906f-3da93e823f63`)
+          .set('Authorization', currentToken)
+          .end((error, res) => {
+            expect(res).to.have.status(404);
+            expect(res.body).to.be.a('object');
+            expect(res.body).to.have.property('error');
+            expect(res.body.error).to.equal(errorStrings.bookingNotFound);
+            done();
+          });
+      });
+
+      it('It should not delete a booking if invalid bookingId', (done) => {
+        chai.request(app)
+          .delete(`${bookingUrl}/23368272-4b57-423c-906f-3da93e823f63-4etys`)
+          .set('Authorization', currentToken)
+          .end((error, res) => {
+            expect(res).to.have.status(422);
+            expect(res.body).to.be.a('object');
+            expect(res.body).to.have.property('error');
+            expect(res.body.error).to.equal(errorStrings.validBookingId);
+            done();
+          });
+      });
+
+      it('It should not delete a booking if bookingId is empty', (done) => {
+        chai.request(app)
+          .delete(`${bookingUrl}/`)
+          .set('Authorization', currentToken)
+          .end((error, res) => {
+            expect(res).to.have.status(404);
+            expect(res.body).to.be.a('object');
+            expect(res.body).to.have.property('error');
+            expect(res.body.error).to.equal(errorStrings.pageNotFound);
             done();
           });
       });
