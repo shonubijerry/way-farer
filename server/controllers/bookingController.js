@@ -28,9 +28,8 @@ class BookingController {
 
   static async createBooking(req, res) {
     try {
-      const { trip_id } = req.body;
+      const { trip_id, seat_number } = req.body;
 
-      // get bus capacity, bus id, trip date, and status
       const tripInfo = await tripModel.getTripInformationQuery(trip_id);
       if (!tripInfo) {
         return ResponseHelper.error(res, 404, errorStrings.tripNotFound);
@@ -42,7 +41,11 @@ class BookingController {
       if (isPastTrip) {
         return ResponseHelper.error(res, 409, errorStrings.pastTrip);
       }
-      const seat_number = await BookingController.getAvailableSeatNumber(trip_id, tripInfo.capacity);
+      const isTaken = await BookingController.checkSeatAvailablity(trip_id, seat_number);
+      if (isTaken) {
+        const errorMessage = `Seat number ${seat_number} is booked. Check available seats with GET /bookings/:tripId/availableSeats`;
+        return ResponseHelper.error(res, 409, errorMessage);
+      }
       const created_on = moment().format('llll');
       const newBooking = await bookingModel.createBookingQuery(req.user.id, trip_id, seat_number, created_on);
       if (!newBooking) {
@@ -95,22 +98,18 @@ class BookingController {
   }
 
   /**
-  * Generate an available seat number for user
+  * Check if a seat number is available to assign a value
   * @param {object} trip_id
-  * @returns {integer} seat_number
+  * @param {object} seat_number
+  * @returns {boolean}
   */
-  static async getAvailableSeatNumber(trip_id, capacity) {
+  static async checkSeatAvailablity(trip_id, seat_number) {
     try {
-      // convert capacity (integer) to array of integers
-      const busSeats = Array.from(new Array(capacity), (x, i) => i + 1);
-
       // get already booked seats for this trip
       let bookedSeats = await bookingModel.getBookedSeats(trip_id);
       bookedSeats = bookedSeats.map(x => x.seat_number);
-
-      // the differece of arrays busSeats and bookedSeats gives availableSeats
-      const availableSeats = busSeats.filter(x => !bookedSeats.includes(x));
-      return availableSeats[0];
+      const inArray = bookedSeats.includes(parseInt(seat_number, 10));
+      return inArray;
     } catch (error) {
       return undefined;
     }
