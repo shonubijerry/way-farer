@@ -27,6 +27,7 @@ class ValidateBooking {
   static validateCreateBooking(request, response, next) {
     const createBookingSchema = Joi.object().keys({
       trip_id: validId.error(new Error(errorStrings.validTripId)),
+      seat_number: Joi.number().required(),
     });
 
     const error = Validator.validateJoi(request.body, createBookingSchema);
@@ -44,11 +45,11 @@ class ValidateBooking {
    * @return {Object} error
    */
   static validateDeleteBooking(request, response, next) {
-    const createBookingSchema = Joi.object().keys({
+    const deleteBookingSchema = Joi.object().keys({
       bookingId: validId.error(new Error(errorStrings.validBookingId)),
     });
 
-    const error = Validator.validateJoi(request.params, createBookingSchema);
+    const error = Validator.validateJoi(request.params, deleteBookingSchema);
     if (!error) {
       return next();
     }

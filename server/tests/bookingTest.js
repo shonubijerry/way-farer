@@ -40,9 +40,10 @@ describe('BOOKING CONTROLLER', () => {
     });
     it('it should create a booking', (done) => {
       const trip_id = 'ccc58272-4b57-423c-906f-3da93e823f49'; // active trip_id
+      const seat_number = 17; // available seat number
       chai.request(app)
         .post(bookingUrl)
-        .send({ trip_id })
+        .send({ trip_id, seat_number })
         .set('Authorization', currentToken)
         .end((error, res) => {
           expect(res).to.have.status(201);
@@ -65,9 +66,10 @@ describe('BOOKING CONTROLLER', () => {
 
     it('it should not create a booking with invalid trip_id', (done) => {
       const trip_id = 'aaac8272-4b57-423c-906f-3da93e823f49-525tt'; // invalid trip_id
+      const seat_number = 17; // available seat number
       chai.request(app)
         .post(bookingUrl)
-        .send({ trip_id })
+        .send({ trip_id, seat_number })
         .set('Authorization', currentToken)
         .end((error, res) => {
           expect(res).to.have.status(422);
@@ -80,9 +82,10 @@ describe('BOOKING CONTROLLER', () => {
 
     it('it should not create a booking with empty trip_id', (done) => {
       const trip_id = ''; // invalid trip_id
+      const seat_number = 17; // available seat number
       chai.request(app)
         .post(bookingUrl)
-        .send({ trip_id })
+        .send({ trip_id, seat_number })
         .set('Authorization', currentToken)
         .end((error, res) => {
           expect(res).to.have.status(422);
@@ -93,11 +96,44 @@ describe('BOOKING CONTROLLER', () => {
         });
     });
 
-    it('it should not create a booking with non-existence trip_id', (done) => {
-      const trip_id = '45bc8272-4b57-423c-906f-3da93e823e48'; // invalid trip_id
+    it('it should not create a booking with empty seat_number', (done) => {
+      const trip_id = 'ccc58272-4b57-423c-906f-3da93e823f49'; // valid trip_id
+      const seat_number = ''; // empty seat number
       chai.request(app)
         .post(bookingUrl)
-        .send({ trip_id })
+        .send({ trip_id, seat_number })
+        .set('Authorization', currentToken)
+        .end((error, res) => {
+          expect(res).to.have.status(422);
+          expect(res.body).to.be.a('object');
+          expect(res.body).to.have.property('error');
+          expect(res.body.error).to.equal(errorStrings.invalidSeatNumber);
+          done();
+        });
+    });
+
+    it('it should not create a booking with invalid seat_number', (done) => {
+      const trip_id = 'ccc58272-4b57-423c-906f-3da93e823f49'; // valid trip_id
+      const seat_number = '3e'; // invalid seat number
+      chai.request(app)
+        .post(bookingUrl)
+        .send({ trip_id, seat_number })
+        .set('Authorization', currentToken)
+        .end((error, res) => {
+          expect(res).to.have.status(422);
+          expect(res.body).to.be.a('object');
+          expect(res.body).to.have.property('error');
+          expect(res.body.error).to.equal(errorStrings.invalidSeatNumber);
+          done();
+        });
+    });
+
+    it('it should not create a booking with non-existence trip_id', (done) => {
+      const trip_id = '45bc8272-4b57-423c-906f-3da93e823e48'; // invalid trip_id
+      const seat_number = 17; // available seat number
+      chai.request(app)
+        .post(bookingUrl)
+        .send({ trip_id, seat_number })
         .set('Authorization', currentToken)
         .end((error, res) => {
           expect(res).to.have.status(404);
@@ -110,9 +146,10 @@ describe('BOOKING CONTROLLER', () => {
 
     it('it should not create a booking for a cancelled trip', (done) => {
       const trip_id = 'bbbc8272-4b57-423c-906f-3da93e823f49'; // cancelled trip
+      const seat_number = 17; // available seat number
       chai.request(app)
         .post(bookingUrl)
-        .send({ trip_id })
+        .send({ trip_id, seat_number })
         .set('Authorization', currentToken)
         .end((error, res) => {
           expect(res).to.have.status(409);
@@ -123,11 +160,28 @@ describe('BOOKING CONTROLLER', () => {
         });
     });
 
-    it('it should not create a booking for a past trip', (done) => {
-      const trip_id = 'dddc8272-4b57-423c-906f-3da93e823f49'; // past trip
+    it('it should not create a booking if seat number is already booked', (done) => {
+      const trip_id = 'ccc58272-4b57-423c-906f-3da93e823f49'; // active trip
+      const seat_number = 22; // already booked seat number
       chai.request(app)
         .post(bookingUrl)
-        .send({ trip_id })
+        .send({ trip_id, seat_number })
+        .set('Authorization', currentToken)
+        .end((error, res) => {
+          expect(res).to.have.status(409);
+          expect(res.body).to.be.a('object');
+          expect(res.body).to.have.property('error');
+          expect(res.body.error).to.equal('Seat number 22 is booked. Check available seats with GET /bookings/:tripId/availableSeats');
+          done();
+        });
+    });
+
+    it('it should not create a booking for a past trip', (done) => {
+      const trip_id = 'dddc8272-4b57-423c-906f-3da93e823f49'; // past trip
+      const seat_number = 17; // available seat number
+      chai.request(app)
+        .post(bookingUrl)
+        .send({ trip_id, seat_number })
         .set('Authorization', currentToken)
         .end((error, res) => {
           expect(res).to.have.status(409);
