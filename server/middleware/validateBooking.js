@@ -55,6 +55,25 @@ class ValidateBooking {
     }
     return responseHelper.error(response, 422, error);
   }
+
+  /**
+ * validate available seat numbers parameters
+ * @param {Object} request
+ * @param {Object} response
+ * @callback {Function} next
+ * @return {Object} error
+ */
+  static validateAvailableSeats(request, response, next) {
+    const availableSeatsSchema = Joi.object().keys({
+      tripId: validId.error(new Error(errorStrings.validTripId)),
+    });
+
+    const error = Validator.validateJoi({ tripId: request.params.tripId }, availableSeatsSchema);
+    if (!error) {
+      return next();
+    }
+    return responseHelper.error(response, 422, error);
+  }
 }
 
 export default ValidateBooking;

@@ -98,6 +98,33 @@ class BookingController {
   }
 
   /**
+  * Generate list of available seat numbers for booking
+  * @param {object} trip_id
+  * @returns {array} array of integers
+  */
+  static async getAvailableSeatNumbers(req, res) {
+    try {
+      const tripInfo = await tripModel.getTripInformationQuery(req.params.tripId);
+      if (!tripInfo) {
+        return ResponseHelper.error(res, 404, errorStrings.tripNotFound);
+      }
+      // convert capacity (integer) to array of integers
+      const busSeats = Array.from(new Array(tripInfo.capacity), (x, i) => i + 1);
+
+      // get already booked seats for this trip
+      let bookedSeats = await bookingModel.getBookedSeats(req.params.tripId);
+      bookedSeats = bookedSeats.map(x => x.seat_number);
+
+      // the differece of arrays busSeats and bookedSeats gives availableSeats
+      const available_seats = busSeats.filter(x => !bookedSeats.includes(x));
+
+      return ResponseHelper.success(res, 200, { available_seats });
+    } catch (error) {
+      return ResponseHelper.error(res, 500, errorStrings.serverError);
+    }
+  }
+
+  /**
   * Check if a seat number is available to assign a value
   * @param {object} trip_id
   * @param {object} seat_number

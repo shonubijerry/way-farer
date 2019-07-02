@@ -328,4 +328,74 @@ describe('BOOKING CONTROLLER', () => {
       });
     });
   });
+
+  describe('GET AVAILABLE SEAT NUMBERS', () => {
+    it('it should return authentication error', (done) => {
+      chai.request(app)
+        .get(`${bookingUrl}/aaac8272-4b57-423c-906f-3da93e823f49/availableSeats`)
+        .end((error, res) => {
+          expect(res).to.have.status(401);
+          expect(res.body).to.be.a('object');
+          expect(res.body).to.have.property('error');
+          expect(res.body.error).to.equal(errorStrings.notAuthenticated);
+          done();
+        });
+    });
+
+    describe('User should get available booking numbers', () => {
+      before((done) => {
+        chai.request(app)
+          .post(signinUrl)
+          .send({
+            email: 'ciromalapai@hotmail.com', // this user is not an admin
+            password: 'olujac1$',
+          })
+          .end((error, res) => {
+            currentToken = res.body.data.token;
+            done();
+          });
+      });
+
+      it('It should get all available seats for a specific trip', (done) => {
+        chai.request(app)
+          .get(`${bookingUrl}/bbbc8272-4b57-423c-906f-3da93e823f49/availableSeats`)
+          .set('Authorization', currentToken)
+          .end((error, res) => {
+            expect(res).to.have.status(200);
+            expect(res.body).to.be.a('object');
+            expect(res.body).to.have.property('data');
+            expect(res.body.data).to.be.a('object');
+            expect(res.body.data.available_seats).to.be.a('array');
+            expect(res.body.data.available_seats[0]).to.be.a('number');
+            done();
+          });
+      });
+
+      it('It should get available seats if trip id is invalid', (done) => {
+        chai.request(app)
+          .get(`${bookingUrl}/aaac8272-4b57-423c-906f-3da93e823f48/availableSeats`)
+          .set('Authorization', currentToken)
+          .end((error, res) => {
+            expect(res).to.have.status(404);
+            expect(res.body).to.be.a('object');
+            expect(res.body).to.have.property('error');
+            expect(res.body.error).to.equal(errorStrings.tripNotFound);
+            done();
+          });
+      });
+
+      it('It should get available seats if trip id is invalid', (done) => {
+        chai.request(app)
+          .get(`${bookingUrl}/aaac8272-4b57-423c-906f-3da93e823f49-77763y/availableSeats`)
+          .set('Authorization', currentToken)
+          .end((error, res) => {
+            expect(res).to.have.status(422);
+            expect(res.body).to.be.a('object');
+            expect(res.body).to.have.property('error');
+            expect(res.body.error).to.equal(errorStrings.validTripId);
+            done();
+          });
+      });
+    });
+  });
 });
