@@ -1,0 +1,119 @@
+paths:
+  /auth/signup:         
+    post:  
+      tags:
+        - auth
+      summary: Registers a new user
+      description: Allows new user to create an account
+      produces:
+      - application/json
+      consumes:
+      - application/json
+      parameters:
+      - name: body
+        in: body
+        description: User object
+        required: true
+        schema:
+          $ref: '#/definitions/UserSignupReq'
+      responses:
+        201:
+          description: User successfully created
+          schema:
+            $ref: '#/definitions/UserSignupRes'
+        409:
+          description: User already exists
+          schema:
+            $ref: '#/definitions/errorDef'
+        422:
+          description: Invalid request details
+          schema:
+            $ref: '#/definitions/errorDef'
+        500:
+          description: Server error
+          schema:
+            $ref: '#/definitions/errorDef'
+  /auth/signin:        
+    post:  
+      tags:
+        - auth
+      summary: Sign a user in
+      description: Allows registered user to signin
+      produces:
+      - application/json
+      consumes:
+      - application/json
+      parameters:
+      - name: body
+        in: body
+        description: User request object
+        required: true
+        schema:
+          $ref: '#/definitions/UserSigninReq'
+      responses:
+        200:
+          description: User login successfully
+          schema:
+            $ref: '#/definitions/UserSignupRes'
+        403:
+          description: Incorrect login details
+          schema:
+            $ref: '#/definitions/errorDef'
+        422:
+          description: Invalid request details
+          schema:
+            $ref: '#/definitions/errorDef'
+        500:
+          description: Server error
+          schema:
+            $ref: '#/definitions/errorDef'
+definitions:
+  UserSignupReq:
+    type: object
+    properties:
+      first_name:
+        type: string
+      last_name:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+  UserSignupRes:
+    type: object
+    properties:
+      status:
+        type: string
+      data:
+        type: object
+        properties:
+          user_id:
+            type: string
+          first_name:
+            type: string
+          last_name:
+            type: string
+          email:
+            type: string
+          password:
+            type: string  
+          is_admin:
+            type: string  
+          token:
+            type: string  
+          registered_on:
+            type: string  
+  UserSigninReq:
+    type: object
+    properties:
+      email:
+        type: string
+      password:
+        type: string    
+  errorDef:
+    type: object
+    properties:
+      status:
+        type: string
+      error:
+        type: string

@@ -1,0 +1,234 @@
+paths:
+  /bookings:
+    post:
+      tags:
+        - user
+      security:
+      - Bearer: []
+      summary: It creates a booking
+      description: Users can create a booking
+      produces:
+      - application/json
+      consumes:
+      - application/json
+      parameters:
+      - name: body
+        in: body
+        description: User object
+        required: true
+        schema:
+          $ref: '#/definitions/CreateBookingReq'
+      responses:
+        200:
+          description: Trip successfully created
+          schema:
+            $ref: '#/definitions/CreateBookingRes'
+        401:
+          description: User login required
+          schema:
+            $ref: '#/definitions/errorDef'
+        404:
+          description: Trip not found
+          schema:
+            $ref: '#/definitions/errorDef'
+        409:
+          description: Trip has been cancelled or trip is in the past or seat number is already booked
+          schema:
+            $ref: '#/definitions/errorDef'
+        500:
+          description: Server error
+          schema:
+            $ref: '#/definitions/errorDef'
+    get:
+      tags:
+        - user
+      security:
+      - Bearer: []
+      summary: It gets all bookings
+      description: Users and admin can view bookings. Users get their created bookings while admin gets all bookings on the platform
+      produces:
+      - application/json
+      consumes:
+      - application/json
+      responses:
+        200:
+          description: Bookings successfully fetched
+          schema:
+            $ref: '#/definitions/GetBookingsRes'
+        401:
+          description: User login required
+          schema:
+            $ref: '#/definitions/errorDef'
+        500:
+          description: Server error
+          schema:
+            $ref: '#/definitions/errorDef'
+  /bookings/{tripId}/availableSeats:
+    get:
+      tags:
+        - user
+      security:
+      - Bearer: []
+      summary: It gets available seat numbers
+      description: Users can get an array of available seat numbers for booking
+      produces:
+      - application/json
+      parameters:
+      - name: tripId
+        in: path
+        description: path parameter takes the trip id
+        required: true
+        type: string
+      responses:
+        200:
+          description: Seat numbers successfully fetched
+          schema:
+            $ref: '#/definitions/AvailableSeatsRes'
+        401:
+          description: User login required
+          schema:
+            $ref: '#/definitions/errorDef'
+        404:
+          description: Trip not found
+          schema:
+            $ref: '#/definitions/errorDef'
+        422:
+          description: Trip id parameter is invalid
+          schema:
+            $ref: '#/definitions/errorDef'
+        500:
+          description: Server error
+          schema:
+            $ref: '#/definitions/errorDef'
+  /bookings/{bookingId}:
+    delete:
+      tags:
+        - admin
+      security:
+      - Bearer: []
+      summary: It deletes a booking
+      description: Users can delete a specific booking
+      produces:
+      - application/json
+      parameters:
+      - name: bookingId
+        in: path
+        description: path parameter takes the booking id
+        required: true
+        type: string
+      responses:
+        200:
+          description: Booking successfully deleted
+          schema:
+            $ref: '#/definitions/DeleteBookingRes'
+        401:
+          description: User login required
+          schema:
+            $ref: '#/definitions/errorDef'
+        404:
+          description: Booking not found
+          schema:
+            $ref: '#/definitions/errorDef'
+        422:
+          description: Booking id parameter is invalid
+          schema:
+            $ref: '#/definitions/errorDef'
+        500:
+          description: Server error
+          schema:
+            $ref: '#/definitions/errorDef'
+definitions:
+  CreateBookingReq:
+    type: object
+    properties:
+      trip_id:
+        type: string
+      seat_number:
+        type: string
+  CreateBookingRes:
+    type: object
+    properties:
+      status:
+        type: string
+      data:
+        type: object
+        properties:
+          booking_id:
+            type: string
+          user_id:
+            type: string
+          trip_id:
+            type: string
+          bus_id:
+            type: string 
+          trip_date:
+            type: string 
+          seat_number:
+            type: string 
+          first_name:
+            type: string 
+          last_name:
+            type: string  
+          email:
+            type: string  
+          created_on:
+            type: string
+  GetBookingsRes:
+    type: object
+    properties:
+      status:
+        type: string
+      data:
+        type: array
+        items:
+          type: object
+          properties:
+            booking_id:
+              type: string
+            user_id:
+              type: string
+            trip_id:
+              type: string
+            bus_id:
+              type: string 
+            trip_date:
+              type: string 
+            seat_number:
+              type: string 
+            first_name:
+              type: string 
+            last_name:
+              type: string  
+            email:
+              type: string  
+            created_on:
+              type: string
+  AvailableSeatsRes:
+    type: object
+    properties:
+      status:
+        type: string
+      data:
+        type: object
+        properties:
+          available_seats:
+            type: array
+            items:
+              type: string  
+  DeleteBookingRes:
+    type: object
+    properties:
+      status:
+        type: string
+      data:
+        type: object
+        properties:
+          message:
+            type: string       
+  errorDef:
+    type: object
+    properties:
+      status:
+        type: string
+      error:
+        type: string

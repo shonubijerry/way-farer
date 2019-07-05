@@ -15,6 +15,9 @@ https://www.pivotaltracker.com/n/projects/2358463
 ## Server side hosted on Heroku
 https://way-farer-shonubi.herokuapp.com
 
+## API documentation 
+https://way-farer-shonubi.herokuapp.com/docs
+
 ## Table of Content
  * [Getting Started](#getting-started)
 
@@ -104,9 +107,10 @@ e.g npm test
 * Users can login
 * Users can book a seat on a trip.
 * Users can delete their booking.
-* Users can get a list of filtered trips based on origin.
-* Users can get a list of filtered trips based on destination.
+* Users can view a list of filtered trips based on origin.
+* Users can view a list of filtered trips based on destination.
 * Users can specify their seat numbers when making a booking.
+* Users can view available seats
 
 ### Admin
 * Admin can create a trip.
