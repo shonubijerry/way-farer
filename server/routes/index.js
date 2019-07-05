@@ -28,13 +28,16 @@ const routes = (app) => {
   app.post(`${api}/trips`, Auth.authenticateAdmin, ValidateTrip.validateCreateTrip, TripController.createTrip);
   app.post(`${api}/bookings`, Auth.authenticateUser, ValidateBooking.validateCreateBooking, BookingController.createBooking);
   app.get(`${api}/bookings`, Auth.authenticateUser, BookingController.getBookings);
-  app.get(`${api}/bookings/:tripId/availableSeats`, Auth.authenticateUser, ValidateBooking.validateAvailableSeats, BookingController.getAvailableSeatNumbers);
+  app.get(`${api}/bookings/:tripId/availableSeats`, Auth.authenticateUser, ValidateBooking.validateAvailableSeats, BookingController.getAvailableSeats);
   app.get(`${api}/trips`, Auth.authenticateUser, ValidateTrip.validateGetTrip, TripController.getTrips);
   app.get(`${api}/trips?filter_by=origin`, Auth.authenticateUser, ValidateTrip.validateGetTrip, TripController.getTrips);
   app.get(`${api}/trips?filter_by=destination`, Auth.authenticateUser, ValidateTrip.validateGetTrip, TripController.getTrips);
   app.patch(`${api}/trips/:tripId`, Auth.authenticateAdmin, ValidateTrip.validateCancelTrip, TripController.cancelTrip);
   app.delete(`${api}/bookings/:bookingId`, Auth.authenticateUser, ValidateBooking.validateDeleteBooking, BookingController.deleteBooking);
-  app.get('/', (req, res) => ResponseHelper.success(res, 200, { message: 'Welcome to Way Farer' }));
+  app.get('/', (req, res) => ResponseHelper.success(res, 200, {
+    message: 'Welcome to Way Farer',
+    api_documentation: 'https://way-farer-shonubi.herokuapp.com/docs',
+  }));
   // invalid url
   app.all('*', (req, res) => ResponseHelper.error(res, 404, errorStrings.pageNotFound));
 };

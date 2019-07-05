@@ -3,6 +3,8 @@ import cors from 'cors';
 import debug from 'debug';
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
+import swaggerUI from 'swagger-ui-express';
+import swaggerSpec from './config/swagger';
 import routes from './routes/index';
 
 /**
@@ -29,6 +31,9 @@ app.use(bodyParser.json());
 
 // 3rd party middleware
 app.use(cors('*'));
+
+// use swagger-Ui-express for your app documentation endpoint
+app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
 routes(app);
 

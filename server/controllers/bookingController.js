@@ -102,7 +102,7 @@ class BookingController {
   * @param {object} trip_id
   * @returns {array} array of integers
   */
-  static async getAvailableSeatNumbers(req, res) {
+  static async getAvailableSeats(req, res) {
     try {
       const tripInfo = await tripModel.getTripInformationQuery(req.params.tripId);
       if (!tripInfo) {

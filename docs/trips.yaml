@@ -1,0 +1,220 @@
+paths:
+  /trips:
+    post:
+      tags:
+        - admin
+      security:
+      - Bearer: []
+      summary: It creates a trip
+      description: Admin can create a trip
+      produces:
+      - application/json
+      consumes:
+      - application/json
+      parameters:
+      - name: body
+        in: body
+        description: User object
+        required: true
+        schema:
+          $ref: '#/definitions/CreateTripReq'
+      responses:
+        200:
+          description: Trip successfully created
+          schema:
+            $ref: '#/definitions/CreateTripRes'
+        401:
+          description: User login required
+          schema:
+            $ref: '#/definitions/errorDef'
+        403:
+          description: User is forbidden from accessing admin area
+          schema:
+            $ref: '#/definitions/errorDef'
+        404:
+          description: Bus id provided for the trip does not exist
+          schema:
+            $ref: '#/definitions/errorDef'
+        409:
+          description: Bus is currently assigned to an active trip
+          schema:
+            $ref: '#/definitions/errorDef'
+        500:
+          description: Server error
+          schema:
+            $ref: '#/definitions/errorDef'
+    get:
+      tags:
+        - user
+      security:
+      - Bearer: []
+      summary: It gets all trips
+      description: Users and admin can view all trips
+      produces:
+      - application/json
+      consumes:
+      - application/json
+      responses:
+        200:
+          description: Trip successfully fetched
+          schema:
+            $ref: '#/definitions/GetTripsRes'
+        401:
+          description: User login required
+          schema:
+            $ref: '#/definitions/errorDef'
+        403:
+          description: User is forbidden from accessing admin area
+          schema:
+            $ref: '#/definitions/errorDef'
+        500:
+          description: Server error
+          schema:
+            $ref: '#/definitions/errorDef'
+  /trips/{tripId}:
+    patch:  
+      tags:
+        - admin
+      security:
+      - Bearer: []
+      summary: It cancels a trip
+      description: Admin can cancel a particular trip
+      produces:
+      - application/json
+      parameters:
+      - name: tripId
+        in: path      # parameters in the path
+        description: path parameter takes the trip id
+        required: true
+        type: string
+      responses:
+        200:
+          description: Trip successfully cancelled
+          schema:
+            $ref: '#/definitions/CancelTripRes'
+        401:
+          description: User login required
+          schema:
+            $ref: '#/definitions/errorDef'
+        403:
+          description: User is forbidden from accessing admin area
+          schema:
+            $ref: '#/definitions/errorDef'
+        404:
+          description: Content not found
+          schema:
+            $ref: '#/definitions/errorDef'
+        409:
+          description: Trip already patched
+          schema:
+            $ref: '#/definitions/errorDef'
+        422:
+          description: Trip id parameter is invalid
+          schema:
+            $ref: '#/definitions/errorDef'
+        500:
+          description: Server error
+          schema:
+            $ref: '#/definitions/errorDef'
+definitions:
+  CreateTripReq:
+    type: object
+    properties:
+      bus_id:
+        type: string
+      origin:
+        type: string
+      destination:
+        type: string  
+      trip_date:
+        type: string  
+      fare:
+        type: string
+  CreateTripRes:
+    type: object
+    properties:
+      status:
+        type: string
+      data:
+        type: object
+        properties:
+          id:
+            type: string
+          bus_id:
+            type: string
+          origin:
+            type: string
+          destination:
+            type: string  
+          trip_date:
+            type: string  
+          fare:
+            type: string 
+          status:
+            type: string  
+          created_on:
+            type: string
+  GetTripsReq:
+    type: object
+    properties:
+      filter_by:
+        type: string
+  GetTripsRes:
+    type: object
+    properties:
+      status:
+        type: string
+      data:
+        type: array
+        items:
+          type: object
+          properties:
+            id:
+              type: string
+            bus_id:
+              type: string
+            origin:
+              type: string
+            destination:
+              type: string  
+            trip_date:
+              type: string  
+            fare:
+              type: string 
+            status:
+              type: string  
+            created_on:
+              type: string
+  CancelTripRes:
+    type: object
+    properties:
+      status:
+        type: string
+      data:
+        type: object
+        properties:
+          trip_id:
+            type: string
+          bus_id:
+            type: string
+          origin:
+            type: string
+          destination:
+            type: string  
+          trip_date:
+            type: string  
+          fare:
+            type: string 
+          status:
+            type: string  
+          created_on:
+            type: string 
+          message:
+            type: string       
+  errorDef:
+    type: object
+    properties:
+      status:
+        type: string
+      error:
+        type: string

@@ -16,6 +16,6 @@ module.exports = {
     },
     rules: {
         camelcase: 'off',
-        "max-len": ["error", { "code": 150 }]
+        "max-len": ["error", { "code": 160 }]
     },
 };
