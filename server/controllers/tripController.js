@@ -54,9 +54,17 @@ class TripController {
   static async getTrips(req, res) {
     try {
       let trips = [];
-      const { filter_by } = req.query;
-      if (filter_by) {
-        trips = await tripModel.getFilteredTrips(filter_by, req.body.filter_value);
+      const { origin, destination } = req.query;
+      if (origin && destination) {
+        trips = await tripModel.getTripsByTwoColumns(['origin', 'destination'], [origin, destination]);
+        return ResponseHelper.success(res, 200, trips);
+      }
+      if (origin) {
+        trips = await tripModel.getTripsBySingleColumn('origin', origin);
+        return ResponseHelper.success(res, 200, trips);
+      }
+      if (destination) {
+        trips = await tripModel.getTripsBySingleColumn('destination', destination);
         return ResponseHelper.success(res, 200, trips);
       }
       trips = await tripModel.getTrips();
