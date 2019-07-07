@@ -72,7 +72,7 @@ describe('BOOKING CONTROLLER', () => {
         .send({ trip_id, seat_number })
         .set('Authorization', currentToken)
         .end((error, res) => {
-          expect(res).to.have.status(422);
+          expect(res).to.have.status(400);
           expect(res.body).to.be.a('object');
           expect(res.body).to.have.property('error');
           expect(res.body.error).to.equal(errorStrings.validTripId);
@@ -88,7 +88,7 @@ describe('BOOKING CONTROLLER', () => {
         .send({ trip_id, seat_number })
         .set('Authorization', currentToken)
         .end((error, res) => {
-          expect(res).to.have.status(422);
+          expect(res).to.have.status(400);
           expect(res.body).to.be.a('object');
           expect(res.body).to.have.property('error');
           expect(res.body.error).to.equal(errorStrings.validTripId);
@@ -104,7 +104,7 @@ describe('BOOKING CONTROLLER', () => {
         .send({ trip_id, seat_number })
         .set('Authorization', currentToken)
         .end((error, res) => {
-          expect(res).to.have.status(422);
+          expect(res).to.have.status(400);
           expect(res.body).to.be.a('object');
           expect(res.body).to.have.property('error');
           expect(res.body.error).to.equal(errorStrings.invalidSeatNumber);
@@ -120,7 +120,7 @@ describe('BOOKING CONTROLLER', () => {
         .send({ trip_id, seat_number })
         .set('Authorization', currentToken)
         .end((error, res) => {
-          expect(res).to.have.status(422);
+          expect(res).to.have.status(400);
           expect(res.body).to.be.a('object');
           expect(res.body).to.have.property('error');
           expect(res.body.error).to.equal(errorStrings.invalidSeatNumber);
@@ -152,7 +152,7 @@ describe('BOOKING CONTROLLER', () => {
         .send({ trip_id, seat_number })
         .set('Authorization', currentToken)
         .end((error, res) => {
-          expect(res).to.have.status(409);
+          expect(res).to.have.status(422);
           expect(res.body).to.be.a('object');
           expect(res.body).to.have.property('error');
           expect(res.body.error).to.equal(errorStrings.cancelledTrip);
@@ -176,6 +176,38 @@ describe('BOOKING CONTROLLER', () => {
         });
     });
 
+    it('it should not create a booking if seat number exceeds bus capacity', (done) => {
+      const trip_id = 'ccc58272-4b57-423c-906f-3da93e823f49'; // active trip
+      const seat_number = 54; // seat number is greater than bus capacity
+      chai.request(app)
+        .post(bookingUrl)
+        .send({ trip_id, seat_number })
+        .set('Authorization', currentToken)
+        .end((error, res) => {
+          expect(res).to.have.status(406);
+          expect(res.body).to.be.a('object');
+          expect(res.body).to.have.property('error');
+          expect(res.body.error).to.equal('Seat number 54 exceeds bus capacity of 30. Check available seats with GET /bookings/:tripId/availableSeats');
+          done();
+        });
+    });
+
+    it('it should not create a booking if seat number is less than 1', (done) => {
+      const trip_id = 'ccc58272-4b57-423c-906f-3da93e823f49'; // active trip
+      const seat_number = -4; // seat number is less than 1
+      chai.request(app)
+        .post(bookingUrl)
+        .send({ trip_id, seat_number })
+        .set('Authorization', currentToken)
+        .end((error, res) => {
+          expect(res).to.have.status(400);
+          expect(res.body).to.be.a('object');
+          expect(res.body).to.have.property('error');
+          expect(res.body.error).to.equal('seat_number must be larger than or equal to 1');
+          done();
+        });
+    });
+
     it('it should not create a booking for a past trip', (done) => {
       const trip_id = 'dddc8272-4b57-423c-906f-3da93e823f49'; // past trip
       const seat_number = 17; // available seat number
@@ -184,7 +216,7 @@ describe('BOOKING CONTROLLER', () => {
         .send({ trip_id, seat_number })
         .set('Authorization', currentToken)
         .end((error, res) => {
-          expect(res).to.have.status(409);
+          expect(res).to.have.status(422);
           expect(res.body).to.be.a('object');
           expect(res.body).to.have.property('error');
           expect(res.body.error).to.equal(errorStrings.pastTrip);
@@ -306,7 +338,7 @@ describe('BOOKING CONTROLLER', () => {
           .delete(`${bookingUrl}/23368272-4b57-423c-906f-3da93e823f63-4etys`)
           .set('Authorization', currentToken)
           .end((error, res) => {
-            expect(res).to.have.status(422);
+            expect(res).to.have.status(400);
             expect(res.body).to.be.a('object');
             expect(res.body).to.have.property('error');
             expect(res.body.error).to.equal(errorStrings.validBookingId);
@@ -389,7 +421,7 @@ describe('BOOKING CONTROLLER', () => {
           .get(`${bookingUrl}/aaac8272-4b57-423c-906f-3da93e823f49-77763y/availableSeats`)
           .set('Authorization', currentToken)
           .end((error, res) => {
-            expect(res).to.have.status(422);
+            expect(res).to.have.status(400);
             expect(res.body).to.be.a('object');
             expect(res.body).to.have.property('error');
             expect(res.body.error).to.equal(errorStrings.validTripId);

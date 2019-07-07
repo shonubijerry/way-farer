@@ -47,7 +47,7 @@ describe('USER CONTROLLER', () => {
           password: 'olujac1$',
         })
         .end((error, res) => {
-          expect(res).to.have.status(422);
+          expect(res).to.have.status(400);
           expect(res.body).to.be.an('object');
           expect(res.body).to.have.property('error');
           expect(res.body.error).to.equal(errorStrings.validName);
@@ -65,7 +65,7 @@ describe('USER CONTROLLER', () => {
           password: 'olujac1$',
         })
         .end((error, res) => {
-          expect(res).to.have.status(422);
+          expect(res).to.have.status(400);
           expect(res.body).to.be.an('object');
           expect(res.body).to.have.property('error');
           expect(res.body.error).to.equal(errorStrings.validName);
@@ -83,7 +83,7 @@ describe('USER CONTROLLER', () => {
           password: 'olujac1$',
         })
         .end((error, res) => {
-          expect(res).to.have.status(422);
+          expect(res).to.have.status(400);
           expect(res.body).to.be.an('object');
           expect(res.body).to.have.property('error');
           expect(res.body.error).to.equal(errorStrings.validEmail);
@@ -119,7 +119,7 @@ describe('USER CONTROLLER', () => {
           password: 'adann', // password length short
         })
         .end((error, res) => {
-          expect(res).to.have.status(422);
+          expect(res).to.have.status(400);
           expect(res.body).to.be.an('object');
           expect(res.body).to.have.property('error');
           expect(res.body.error).to.equal(errorStrings.passwordLength);
@@ -137,7 +137,7 @@ describe('USER CONTROLLER', () => {
           password: '', // empty password
         })
         .end((error, res) => {
-          expect(res).to.have.status(422);
+          expect(res).to.have.status(400);
           expect(res.body).to.be.an('object');
           expect(res.body).to.have.property('error');
           expect(res.body.error).to.equal(errorStrings.passwordEmpty);
@@ -178,7 +178,7 @@ describe('USER CONTROLLER', () => {
           password: 'olujac1$',
         })
         .end((error, res) => {
-          expect(res).to.have.status(422);
+          expect(res).to.have.status(400);
           expect(res.body).to.be.an('object');
           expect(res.body).to.have.property('error');
           expect(res.body.error).to.equal(errorStrings.validEmail);
@@ -194,7 +194,7 @@ describe('USER CONTROLLER', () => {
           password: '', // empty login password
         })
         .end((error, res) => {
-          expect(res).to.have.status(422);
+          expect(res).to.have.status(400);
           expect(res.body).to.be.an('object');
           expect(res.body).to.have.property('error');
           expect(res.body.error).to.equal(errorStrings.passwordEmpty);

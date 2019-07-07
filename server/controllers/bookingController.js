@@ -35,15 +35,19 @@ class BookingController {
         return ResponseHelper.error(res, 404, errorStrings.tripNotFound);
       }
       if (tripInfo.status === 'cancelled') {
-        return ResponseHelper.error(res, 409, errorStrings.cancelledTrip);
+        return ResponseHelper.error(res, 422, errorStrings.cancelledTrip);
+      }
+      if (seat_number > tripInfo.capacity) {
+        const errorMessage = `Seat number ${seat_number} exceeds bus capacity of ${tripInfo.capacity}. ${errorStrings.availableSeatsAPI}`;
+        return ResponseHelper.error(res, 406, errorMessage);
       }
       const isPastTrip = moment().isAfter(moment(tripInfo.trip_date, 'llll'));
       if (isPastTrip) {
-        return ResponseHelper.error(res, 409, errorStrings.pastTrip);
+        return ResponseHelper.error(res, 422, errorStrings.pastTrip);
       }
       const isTaken = await BookingController.checkSeatAvailablity(trip_id, seat_number);
       if (isTaken) {
-        const errorMessage = `Seat number ${seat_number} is booked. Check available seats with GET /bookings/:tripId/availableSeats`;
+        const errorMessage = `Seat number ${seat_number} is booked. ${errorStrings.availableSeatsAPI}`;
         return ResponseHelper.error(res, 409, errorMessage);
       }
       const created_on = moment().format('llll');
