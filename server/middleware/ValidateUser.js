@@ -39,7 +39,7 @@ class ValidateUser {
     if (!error) {
       return next();
     }
-    return responseHelper.error(response, 422, error);
+    return responseHelper.error(response, 400, error);
   }
 
   /**
@@ -63,7 +63,7 @@ class ValidateUser {
     if (!error) {
       return next();
     }
-    return responseHelper.error(response, 422, error);
+    return responseHelper.error(response, 400, error);
   }
 }
 

@@ -94,7 +94,7 @@ describe('TRIP CONTROLLER', () => {
           .send(testData.trip[1])
           .set('Authorization', currentToken)
           .end((error, res) => {
-            expect(res).to.have.status(422);
+            expect(res).to.have.status(400);
             expect(res.body).to.be.a('object');
             expect(res.body).to.have.property('error');
             expect(res.body.error).to.equal(errorStrings.validBusId);
@@ -108,7 +108,7 @@ describe('TRIP CONTROLLER', () => {
           .send(testData.trip[2])
           .set('Authorization', currentToken)
           .end((error, res) => {
-            expect(res).to.have.status(422);
+            expect(res).to.have.status(400);
             expect(res.body).to.be.a('object');
             expect(res.body).to.have.property('error');
             expect(res.body.error).to.equal(errorStrings.validOrigin);
@@ -122,7 +122,7 @@ describe('TRIP CONTROLLER', () => {
           .send(testData.trip[3])
           .set('Authorization', currentToken)
           .end((error, res) => {
-            expect(res).to.have.status(422);
+            expect(res).to.have.status(400);
             expect(res.body).to.be.a('object');
             expect(res.body).to.have.property('error');
             expect(res.body.error).to.equal(errorStrings.validDestination);
@@ -136,7 +136,7 @@ describe('TRIP CONTROLLER', () => {
           .send(testData.trip[5])
           .set('Authorization', currentToken)
           .end((error, res) => {
-            expect(res).to.have.status(422);
+            expect(res).to.have.status(400);
             expect(res.body).to.be.a('object');
             expect(res.body).to.have.property('error');
             expect(res.body.error).to.equal(errorStrings.validTripDate);
@@ -150,7 +150,7 @@ describe('TRIP CONTROLLER', () => {
           .send(testData.trip[6])
           .set('Authorization', currentToken)
           .end((error, res) => {
-            expect(res).to.have.status(422);
+            expect(res).to.have.status(400);
             expect(res.body).to.be.a('object');
             expect(res.body).to.have.property('error');
             expect(res.body.error).to.equal(errorStrings.validFare);
@@ -164,7 +164,7 @@ describe('TRIP CONTROLLER', () => {
           .send(testData.trip[7])
           .set('Authorization', currentToken)
           .end((error, res) => {
-            expect(res).to.have.status(422);
+            expect(res).to.have.status(400);
             expect(res.body).to.be.a('object');
             expect(res.body).to.have.property('error');
             expect(res.body.error).to.equal(errorStrings.validFare);
@@ -206,7 +206,7 @@ describe('TRIP CONTROLLER', () => {
           .send(testData.trip[10])
           .set('Authorization', currentToken)
           .end((error, res) => {
-            expect(res).to.have.status(422);
+            expect(res).to.have.status(400);
             expect(res.body).to.be.a('object');
             expect(res.body).to.have.property('error');
             done();
@@ -363,7 +363,7 @@ describe('TRIP CONTROLLER', () => {
           .set('Authorization', currentToken)
           .send({ filter_value: '' })
           .end((error, res) => {
-            expect(res).to.have.status(422);
+            expect(res).to.have.status(400);
             expect(res.body).to.be.a('object');
             expect(res.body).to.have.property('error');
             expect(res.body.error).to.equal(errorStrings.validFilterValue);
@@ -481,7 +481,7 @@ describe('TRIP CONTROLLER', () => {
           .patch(`${tripUrl}/${tripId}`)
           .set('Authorization', currentToken)
           .end((error, res) => {
-            expect(res).to.have.status(422);
+            expect(res).to.have.status(400);
             expect(res.body).to.be.an('object');
             expect(res.body).to.have.property('error');
             expect(res.body.error).to.equal(errorStrings.validTripId);

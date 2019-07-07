@@ -27,14 +27,14 @@ class ValidateBooking {
   static validateCreateBooking(request, response, next) {
     const createBookingSchema = Joi.object().keys({
       trip_id: validId.error(new Error(errorStrings.validTripId)),
-      seat_number: Joi.number().required(),
+      seat_number: Joi.number().min(1).required(),
     });
 
     const error = Validator.validateJoi(request.body, createBookingSchema);
     if (!error) {
       return next();
     }
-    return responseHelper.error(response, 422, error);
+    return responseHelper.error(response, 400, error);
   }
 
   /**
@@ -53,7 +53,7 @@ class ValidateBooking {
     if (!error) {
       return next();
     }
-    return responseHelper.error(response, 422, error);
+    return responseHelper.error(response, 400, error);
   }
 
   /**
@@ -72,7 +72,7 @@ class ValidateBooking {
     if (!error) {
       return next();
     }
-    return responseHelper.error(response, 422, error);
+    return responseHelper.error(response, 400, error);
   }
 }
 
