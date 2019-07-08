@@ -48,18 +48,17 @@ class ValidateTrip {
  * @return {Object} error
  */
   static validateGetTrip(request, response, next) {
-    const { filter_by } = request.query;
-    if (!filter_by) {
+    const { origin, destination } = request.query;
+    if (!origin && !destination) {
       return next();
     }
-    if (filter_by !== 'origin' && filter_by !== 'destination') {
-      return responseHelper.error(response, 404, errorStrings.pageNotFound);
-    }
     const data = {
-      filter_value: request.body.filter_value,
+      origin,
+      destination,
     };
     const getTripSchema = Joi.object().keys({
-      filter_value: Joi.string().required(),
+      origin: Joi.string().min(3),
+      destination: Joi.string().min(3),
     });
 
     const error = Validator.validateJoi(data, getTripSchema);

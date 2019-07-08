@@ -30,8 +30,6 @@ const routes = (app) => {
   app.get(`${api}/bookings`, Auth.authenticateUser, BookingController.getBookings);
   app.get(`${api}/bookings/:tripId/availableSeats`, Auth.authenticateUser, ValidateBooking.validateAvailableSeats, BookingController.getAvailableSeats);
   app.get(`${api}/trips`, Auth.authenticateUser, ValidateTrip.validateGetTrip, TripController.getTrips);
-  app.get(`${api}/trips?filter_by=origin`, Auth.authenticateUser, ValidateTrip.validateGetTrip, TripController.getTrips);
-  app.get(`${api}/trips?filter_by=destination`, Auth.authenticateUser, ValidateTrip.validateGetTrip, TripController.getTrips);
   app.patch(`${api}/trips/:tripId`, Auth.authenticateAdmin, ValidateTrip.validateCancelTrip, TripController.cancelTrip);
   app.delete(`${api}/bookings/:bookingId`, Auth.authenticateUser, ValidateBooking.validateDeleteBooking, BookingController.deleteBooking);
   app.get('/', (req, res) => ResponseHelper.success(res, 200, {

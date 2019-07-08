@@ -48,13 +48,28 @@ class TripModel extends Model {
   }
 
   /**
-     * Get filtered trips
+     * Get filtered trips by a single column
      * @returns {object} an object with all trips
      */
 
-  async getFilteredTrips(filter_by, filter_value) {
+  async getTripsBySingleColumn(column, value) {
     try {
-      const { rows } = await this.selectWhere('*', `LOWER(${filter_by}) LIKE LOWER('%${filter_value}%')`);
+      const { rows } = await this.selectWhere('*', `LOWER(${column}) LIKE LOWER('%${value}%')`);
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  /**
+     * Get filtered trips by two columns
+     * @returns {object} an object with all trips
+     */
+
+  async getTripsByTwoColumns(column, value) {
+    try {
+      const { rows } = await this.selectWhere('*',
+        `LOWER(${column[0]}) LIKE LOWER('%${value[0]}%') and LOWER(${column[1]}) LIKE LOWER('%${value[1]}%')`);
       return rows;
     } catch (error) {
       throw error;
