@@ -1,0 +1,88 @@
+paths:
+  /buses:
+    post:
+      tags:
+        - admin
+      security:
+      - Bearer: []
+      summary: It creates a bus
+      description: Admin can create a bus
+      produces:
+      - application/json
+      consumes:
+      - application/json
+      parameters:
+      - name: body
+        in: body
+        description: Bus object
+        required: true
+        schema:
+          $ref: '#/definitions/CreateBusReq'
+      responses:
+        200:
+          description: Bus successfully created
+          schema:
+            $ref: '#/definitions/CreateBusRes'
+        400:
+          description: Bad form input values
+          schema:
+            $ref: '#/definitions/errorDef'
+        401:
+          description: User login required
+          schema:
+            $ref: '#/definitions/errorDef'
+        403:
+          description: User is forbidden from accessing admin area
+          schema:
+            $ref: '#/definitions/errorDef'
+        409:
+          description: Bus plate number has already been added by another bus
+          schema:
+            $ref: '#/definitions/errorDef'
+        500:
+          description: Server error
+          schema:
+            $ref: '#/definitions/errorDef'
+definitions:
+  CreateBusReq:
+    type: object
+    properties:
+      number_plate:
+        type: string
+      manufacturer:
+        type: string
+      model:
+        type: string  
+      year:
+        type: string  
+      capacity:
+        type: string
+  CreateBusRes:
+    type: object
+    properties:
+      status:
+        type: string
+      data:
+        type: object
+        properties:
+          id:
+            type: string
+          number_plate:
+            type: string
+          manufacturer:
+            type: string
+          model:
+            type: string  
+          year:
+            type: string  
+          capacity:
+            type: string 
+          created_on:
+            type: string    
+  errorDef:
+    type: object
+    properties:
+      status:
+        type: string
+      error:
+        type: string

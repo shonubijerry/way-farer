@@ -29,7 +29,7 @@ class ValidateTrip {
       bus_id: validId.error(new Error(errorStrings.validBusId)),
       origin: Joi.string().required(),
       destination: Joi.string().required(),
-      trip_date: Joi.date().iso().greater(new Date().toLocaleString()).required(),
+      trip_date: Joi.date().iso().greater(new Date()).required(),
       fare: Joi.number().precision(2).required(),
     });
 

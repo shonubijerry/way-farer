@@ -1,15 +1,17 @@
 import moment from 'moment';
 import TripModel from '../model/tripModel';
+import BusModel from '../model/busModel';
 import errorStrings from '../helpers/errorStrings';
 import ResponseHelper from '../helpers/responseHelper';
 
 const tripModel = new TripModel('trip');
-const busModel = new TripModel('bus');
+const busModel = new BusModel('bus');
 
 /**
 * @fileOverview - class manages all trip logic
 * @class - TripController
 * @requires - ../model/tripsModel
+* @requires - ../model/busModel
 * @requires - ../helpers/errorStrings
 * @requires - ../helpers/responseHelper
 * @exports - TripController
@@ -24,7 +26,7 @@ class TripController {
 
   static async createTrip(req, res) {
     try {
-      const busExists = await busModel.checkBusExists(req.body.bus_id);
+      const busExists = await busModel.checkBusExists('id', req.body.bus_id);
       if (!busExists) {
         return ResponseHelper.error(res, 404, errorStrings.busNotFound);
       }

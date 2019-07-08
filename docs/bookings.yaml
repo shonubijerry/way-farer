@@ -14,7 +14,7 @@ paths:
       parameters:
       - name: body
         in: body
-        description: User object
+        description: Booking object
         required: true
         schema:
           $ref: '#/definitions/CreateBookingReq'

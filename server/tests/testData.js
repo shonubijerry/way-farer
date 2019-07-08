@@ -83,6 +83,72 @@ const trip = [
   }, // 2020-01-27T12:23
 ];
 
+const bus = [
+  { // element 0
+    number_plate: 'KJA-675-WA', // valid bus details
+    manufacturer: 'Toyota',
+    model: 'Camrey',
+    year: 1975,
+    capacity: 40,
+  },
+  { // element 1
+    number_plate: 'KJA-675-WAW', // invalid number plate
+    manufacturer: 'Toyota',
+    model: 'Camrey',
+    year: 1975,
+    capacity: 40,
+  },
+  { // element 2
+    number_plate: '', // empty number plate
+    manufacturer: 'Toyota',
+    model: 'Camrey',
+    year: 1975,
+    capacity: 40,
+  },
+  { // element 3
+    number_plate: 'KJA-675-WA',
+    manufacturer: '', // empty manufacturer
+    model: 'Camrey',
+    year: 1975,
+    capacity: 40,
+  },
+  { // element 4
+    number_plate: 'KJA-675-WA',
+    manufacturer: 'Toyota',
+    model: '', // empty model
+    year: 1975,
+    capacity: 40,
+  },
+  { // element 5
+    number_plate: 'KJA-675-WA',
+    manufacturer: 'Toyota',
+    model: 'Camrey',
+    year: 1900, // invalid manufacture year
+    capacity: 40,
+  },
+  { // element 6
+    number_plate: 'KJA-675-WA',
+    manufacturer: 'Toyota',
+    model: 'Camrey',
+    year: '', // empty manufacture year
+    capacity: 40,
+  },
+  { // element 7
+    number_plate: 'KJA-675-WA',
+    manufacturer: 'Toyota',
+    model: 'Camrey',
+    year: 1975,
+    capacity: 600, // invalid bus capacity
+  },
+  { // element 8
+    number_plate: 'KJA-675-WA',
+    manufacturer: 'Toyota',
+    model: 'Camrey',
+    year: 1975,
+    capacity: 600, // empty bus capacity
+  },
+];
+
 export default {
-  trip,
+  trip, bus,
 };
