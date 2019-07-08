@@ -12,11 +12,12 @@
     "pre-test": "NODE_ENV=test npm run exec-db-dev",
     "exec-db-dev": "npm run dev-migration && npm run seeder",
     "dev-migration": "DEBUG=app/debug babel-node ./server/model/db/migrations.db",
-    "seeder": "DEBUG=app/seeder babel-node ./server/model/db/seed.db",
+    "dev-seeder": "DEBUG=app/seeder babel-node ./server/model/db/seed.db",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "coveralls": "nyc --reporter=lcov --reporter=text-lcov npm test",
-    "exec-db-production": "npm run build && NODE_ENV=production npm run migration",
+    "exec-db-production": "npm run build && NODE_ENV=production npm run migration && npm run seeder",
     "migration": "node ./dist/model/db/migrations.db",
+    "seeder": "node ./dist/model/db/seed.db",
     "heroku-postbuild": "NODE_ENV=production npm run exec-db-production"
   },
   "repository": {
