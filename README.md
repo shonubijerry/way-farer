@@ -84,9 +84,11 @@ e.g npm test
 
 <tr><td>GET</td> <td>/api/v1/trips</td>  <td>View all trips</td></tr>
 
-<tr><td>GET</td> <td>/api/v1/trips?filter_by=origin</td>  <td>View trips by origin</td></tr>
+<tr><td>GET</td> <td>/api/v1/trips?origin=VALUE</td>  <td>Filter trips by origin</td></tr>
 
-<tr><td>GET</td> <td>/api/v1/trips?filter_by=destination</td>  <td>View trips by destination</td></tr>
+<tr><td>GET</td> <td>/api/v1/trips?destination=VALUE</td>  <td>Filter trips by destination</td></tr>
+
+<tr><td>GET</td> <td>/api/v1/trips?origin=VALUE&destination=VALUE</td>  <td>Filter trips by origin and destination</td></tr>
 
 <tr><td>GET</td> <td>/api/v1/bookings</td>  <td>View all bookings</td></tr>
 

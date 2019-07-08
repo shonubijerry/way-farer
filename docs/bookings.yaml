@@ -23,6 +23,10 @@ paths:
           description: Trip successfully created
           schema:
             $ref: '#/definitions/CreateBookingRes'
+        400:
+          description: Invalid form data input
+          schema:
+            $ref: '#/definitions/errorDef'
         401:
           description: User login required
           schema:
@@ -31,8 +35,16 @@ paths:
           description: Trip not found
           schema:
             $ref: '#/definitions/errorDef'
+        406:
+          description: Seat number exceeds bus capacity
+          schema:
+            $ref: '#/definitions/errorDef'
         409:
-          description: Trip has been cancelled or trip is in the past or seat number is already booked
+          description: Seat number is already booked
+          schema:
+            $ref: '#/definitions/errorDef'
+        422:
+          description: Trip has been cancelled or trip is in the past
           schema:
             $ref: '#/definitions/errorDef'
         500:
@@ -84,16 +96,16 @@ paths:
           description: Seat numbers successfully fetched
           schema:
             $ref: '#/definitions/AvailableSeatsRes'
+        400:
+          description: Trip id parameter is invalid
+          schema:
+            $ref: '#/definitions/errorDef'
         401:
           description: User login required
           schema:
             $ref: '#/definitions/errorDef'
         404:
           description: Trip not found
-          schema:
-            $ref: '#/definitions/errorDef'
-        422:
-          description: Trip id parameter is invalid
           schema:
             $ref: '#/definitions/errorDef'
         500:
@@ -103,7 +115,7 @@ paths:
   /bookings/{bookingId}:
     delete:
       tags:
-        - admin
+        - user
       security:
       - Bearer: []
       summary: It deletes a booking
@@ -121,16 +133,16 @@ paths:
           description: Booking successfully deleted
           schema:
             $ref: '#/definitions/DeleteBookingRes'
+        400:
+          description: Booking id parameter is invalid
+          schema:
+            $ref: '#/definitions/errorDef'
         401:
           description: User login required
           schema:
             $ref: '#/definitions/errorDef'
         404:
           description: Booking not found
-          schema:
-            $ref: '#/definitions/errorDef'
-        422:
-          description: Booking id parameter is invalid
           schema:
             $ref: '#/definitions/errorDef'
         500:
