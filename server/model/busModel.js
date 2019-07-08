@@ -46,6 +46,20 @@ class BusModel extends Model {
       throw error;
     }
   }
+
+  /**
+     * Get buses
+     * @returns {object} an array objects with all buses
+     */
+
+  async getBusesQuery() {
+    try {
+      const { rows } = await this.select('*');
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 export default BusModel;

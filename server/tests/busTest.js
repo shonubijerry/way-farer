@@ -215,4 +215,75 @@ describe('BUS CONTROLLER', () => {
       });
     });
   });
+  describe('GET BUSES', () => {
+    it('it should return authentication error', (done) => {
+      chai.request(app)
+        .get(busUrl)
+        .end((error, res) => {
+          expect(res).to.have.status(401);
+          expect(res.body).to.be.a('object');
+          expect(res.body).to.have.property('error');
+          expect(res.body.error).to.equal(errorStrings.notAuthenticated);
+          done();
+        });
+    });
+    describe('Admin and user should get all buses', () => {
+      it('it should get all buses for admin', (done) => {
+        chai.request(app)
+          .get(busUrl)
+          .set('Authorization', currentToken)
+          .end((error, res) => {
+            expect(res).to.have.status(200);
+            expect(res.body).to.be.a('object');
+            expect(res.body).to.have.property('data');
+            expect(res.body.data).to.be.a('array');
+            expect(res.body.data[0]).to.be.a('object');
+            expect(res.body.data[0]).to.have.property('id');
+            expect(res.body.data[0]).to.have.property('number_plate');
+            expect(res.body.data[0]).to.have.property('manufacturer');
+            expect(res.body.data[0]).to.have.property('model');
+            expect(res.body.data[0]).to.have.property('year');
+            expect(res.body.data[0]).to.have.property('capacity');
+            expect(res.body.data[0]).to.have.property('created_on');
+            done();
+          });
+      });
+    });
+
+    describe('User should get all trips', () => {
+      before((done) => {
+        chai.request(app)
+          .post(signinUrl)
+          .send({
+            email: 'adenekan2017@gmail.com', // this user is not an admin
+            password: 'olujac1$',
+          })
+          .end((error, res) => {
+            currentToken = res.body.data.token;
+            done();
+          });
+      });
+
+      it('It should get all buses for a user', (done) => {
+        chai.request(app)
+          .get(busUrl)
+          .set('Authorization', currentToken)
+          .end((error, res) => {
+            expect(res).to.have.status(200);
+            expect(res.body).to.be.a('object');
+            expect(res.body).to.have.property('data');
+            expect(res.body.data).to.be.a('array');
+            expect(res.body.data[0]).to.be.a('object');
+            expect(res.body.data[0]).to.have.property('id');
+            expect(res.body.data[0]).to.have.property('number_plate');
+            expect(res.body.data[0]).to.have.property('manufacturer');
+            expect(res.body.data[0]).to.have.property('model');
+            expect(res.body.data[0]).to.have.property('year');
+            expect(res.body.data[0]).to.have.property('capacity');
+            expect(res.body.data[0]).to.have.property('created_on');
+            done();
+          });
+      });
+    });
+  });
 });

@@ -43,6 +43,30 @@ paths:
           description: Server error
           schema:
             $ref: '#/definitions/errorDef'
+    get:
+      tags:
+        - user
+      security:
+      - Bearer: []
+      summary: It gets all buses
+      description: Users and admin can view buses.
+      produces:
+      - application/json
+      consumes:
+      - application/json
+      responses:
+        200:
+          description: Buses successfully fetched
+          schema:
+            $ref: '#/definitions/GetBusesRes'
+        401:
+          description: User login required
+          schema:
+            $ref: '#/definitions/errorDef'
+        500:
+          description: Server error
+          schema:
+            $ref: '#/definitions/errorDef'
 definitions:
   CreateBusReq:
     type: object
@@ -78,7 +102,31 @@ definitions:
           capacity:
             type: string 
           created_on:
-            type: string    
+            type: string  
+  GetBusesRes:
+    type: object
+    properties:
+      status:
+        type: string
+      data:
+        type: array
+        items:
+          type: object
+          properties:
+            id:
+              type: string
+            number_plate:
+              type: string
+            manufacturer:
+              type: string
+            model:
+              type: string  
+            year:
+              type: string  
+            capacity:
+              type: string 
+            created_on:
+              type: string    
   errorDef:
     type: object
     properties:
