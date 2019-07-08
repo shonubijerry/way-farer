@@ -30,6 +30,7 @@ const routes = (app) => {
   app.post(`${api}/buses`, Auth.authenticateAdmin, ValidateBus.validateCreateBus, BusController.createBus);
   app.post(`${api}/trips`, Auth.authenticateAdmin, ValidateTrip.validateCreateTrip, TripController.createTrip);
   app.post(`${api}/bookings`, Auth.authenticateUser, ValidateBooking.validateCreateBooking, BookingController.createBooking);
+  app.get(`${api}/buses`, Auth.authenticateUser, BusController.getBuses);
   app.get(`${api}/bookings`, Auth.authenticateUser, BookingController.getBookings);
   app.get(`${api}/bookings/:tripId/availableSeats`, Auth.authenticateUser, ValidateBooking.validateAvailableSeats, BookingController.getAvailableSeats);
   app.get(`${api}/trips`, Auth.authenticateUser, ValidateTrip.validateGetTrip, TripController.getTrips);

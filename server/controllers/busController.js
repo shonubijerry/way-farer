@@ -38,6 +38,23 @@ class BusController {
       return ResponseHelper.error(res, 500, errorStrings.serverError);
     }
   }
+
+  /**
+     * Get buses (for users and admin)
+     * @param {object} req
+     * @param {object} res
+     * @returns {object} return all buses
+     */
+
+  static async getBuses(req, res) {
+    try {
+      const buses = await busModel.getBusesQuery();
+
+      return ResponseHelper.success(res, 200, buses);
+    } catch (error) {
+      return ResponseHelper.error(res, 500, errorStrings.serverError);
+    }
+  }
 }
 
 export default BusController;
