@@ -10,7 +10,7 @@
     "start-dev": "NODE_ENV=development npm run exec-db-dev && NODE_ENV=development DEBUG=app/debug nodemon --exec babel-node ./server/app.js",
     "test": "npm run pre-test && NODE_ENV=test nyc --reporter=html --reporter=text mocha --timeout 20000 -r @babel/register ./server/tests/ --exit",
     "pre-test": "NODE_ENV=test npm run exec-db-dev",
-    "exec-db-dev": "npm run dev-migration && npm run seeder",
+    "exec-db-dev": "npm run dev-migration && npm run dev-seeder",
     "dev-migration": "DEBUG=app/debug babel-node ./server/model/db/migrations.db",
     "dev-seeder": "DEBUG=app/seeder babel-node ./server/model/db/seed.db",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
