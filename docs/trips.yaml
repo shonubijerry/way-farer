@@ -14,7 +14,7 @@ paths:
       parameters:
       - name: body
         in: body
-        description: User object
+        description: Trip object
         required: true
         schema:
           $ref: '#/definitions/CreateTripReq'
@@ -61,12 +61,12 @@ paths:
       parameters:
       - name: origin
         in: query 
-        description: query parameter takes origin value
+        description: origin to filter
         required: false
         type: string
       - name: destination
         in: query 
-        description: query parameter takes destination value
+        description: destination to filter
         required: false
         type: string
       responses:

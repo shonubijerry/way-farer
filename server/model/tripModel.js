@@ -132,20 +132,6 @@ class TripModel extends Model {
       throw error;
     }
   }
-
-  /**
- * Check if a bus exists in the database
- * @param {string} bus_id
- * @returns {object} An object containing the bus trip info
- */
-  async checkBusExists(bus_id) {
-    try {
-      const { rows } = await this.selectWhere('*', 'id=$1', [bus_id]);
-      return rows[0];
-    } catch (error) {
-      throw error;
-    }
-  }
 }
 
 export default TripModel;

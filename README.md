@@ -82,6 +82,8 @@ e.g npm test
 
 <tr><td>POST</td> <td>/api/v1/bookings</td>  <td>Book a seat on a trip</td></tr>
 
+<tr><td>POST</td> <td>/api/v1/buses</td>  <td>Create a bus</td></tr>
+
 <tr><td>GET</td> <td>/api/v1/trips</td>  <td>View all trips</td></tr>
 
 <tr><td>GET</td> <td>/api/v1/trips?origin=VALUE</td>  <td>Filter trips by origin</td></tr>
@@ -117,6 +119,7 @@ e.g npm test
 ### Admin
 * Admin can create a trip.
 * Admin can cancel a trip.
+* Admin can create a bus.
 * Both Admin and Users can see all trips.
 * View all bookings. An Admin can see all bookings, while user can see all of his/her bookings.
  

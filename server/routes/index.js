@@ -1,10 +1,12 @@
 import ResponseHelper from '../helpers/responseHelper';
 import errorStrings from '../helpers/errorStrings';
 import ValidateUser from '../middleware/ValidateUser';
+import ValidateBus from '../middleware/validateBus';
 import ValidateTrip from '../middleware/validateTrip';
 import ValidateBooking from '../middleware/validateBooking';
 import Auth from '../middleware/Auth';
 import UsersController from '../controllers/usersController';
+import BusController from '../controllers/busController';
 import TripController from '../controllers/tripController';
 import BookingController from '../controllers/bookingController';
 
@@ -25,6 +27,7 @@ const routes = (app) => {
   const api = '/api/v1';
   app.post(`${api}/auth/signup`, ValidateUser.validateSignupFormData, UsersController.signup);
   app.post(`${api}/auth/signin`, ValidateUser.validateSigninFormData, UsersController.signin);
+  app.post(`${api}/buses`, Auth.authenticateAdmin, ValidateBus.validateCreateBus, BusController.createBus);
   app.post(`${api}/trips`, Auth.authenticateAdmin, ValidateTrip.validateCreateTrip, TripController.createTrip);
   app.post(`${api}/bookings`, Auth.authenticateUser, ValidateBooking.validateCreateBooking, BookingController.createBooking);
   app.get(`${api}/bookings`, Auth.authenticateUser, BookingController.getBookings);
