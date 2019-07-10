@@ -15,7 +15,7 @@ paths:
       - name: body
         in: body
         description: Booking object
-        required: true
+        required: false
         schema:
           $ref: '#/definitions/CreateBookingReq'
       responses:
@@ -40,7 +40,7 @@ paths:
           schema:
             $ref: '#/definitions/errorDef'
         409:
-          description: Seat number is already booked
+          description: Seat number is already booked or no available seat on trip
           schema:
             $ref: '#/definitions/errorDef'
         422:

@@ -15,7 +15,8 @@ const swaggerDefinition = {
       url: 'https://opensource.org/licenses/MIT',
     },
   },
-  host: 'way-farer-shonubi.herokuapp.com', // the host or url of the app
+  // host: 'way-farer-shonubi.herokuapp.com', // the host or url of the app
+  host: 'localhost:8300', // the host or url of the app
   basePath: '/api/v1', // the basepath of your endpoint
   tags: [{
     name: 'auth',
