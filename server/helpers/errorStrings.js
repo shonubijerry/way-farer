@@ -35,6 +35,7 @@ const errorStrings = {
   validFilterValue: 'filter_value is not allowed to be empty',
   validBookingId: 'Enter a valid booking id',
   bookingNotFound: 'Booking not found',
+  seatsOccupied: 'All seats on this trip are already booked',
   invalidSeatNumber: 'seat_number must be a number',
   availableSeatsAPI: 'Check available seats with GET /bookings/:tripId/availableSeats',
 

@@ -94,6 +94,8 @@ e.g npm test
 
 <tr><td>GET</td> <td>/api/v1/bookings</td>  <td>View all bookings</td></tr>
 
+<tr><td>GET</td> <td>/api/v1/buses</td>  <td>View all buses</td></tr>
+
 <tr><td>PATCH</td> <td>/api/v1/trips/:tripId</td>  <td>Cancel a trip</td></tr>
 
 <tr><td>DELETE</td> <td>/api/v1/bookings/:bookingId</td>  <td>Delete a booking</td></tr>
@@ -111,8 +113,11 @@ e.g npm test
 * Users can login
 * Users can book a seat on a trip.
 * Users can delete their booking.
+* Users can view buses.
+* Users can view trips.
 * Users can view a list of filtered trips based on origin.
 * Users can view a list of filtered trips based on destination.
+* Users can view a list of filtered trips based on origin and destination.
 * Users can specify their seat numbers when making a booking.
 * Users can view available seats
 

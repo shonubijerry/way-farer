@@ -29,7 +29,6 @@ class BookingController {
   static async createBooking(req, res) {
     try {
       const { trip_id, seat_number } = req.body;
-
       const tripInfo = await tripModel.getTripInformationQuery(trip_id);
       if (!tripInfo) {
         return ResponseHelper.error(res, 404, errorStrings.tripNotFound);
@@ -45,16 +44,13 @@ class BookingController {
       if (isPastTrip) {
         return ResponseHelper.error(res, 422, errorStrings.pastTrip);
       }
-      const isTaken = await BookingController.checkSeatAvailablity(trip_id, seat_number);
-      if (isTaken) {
+      const available_seats = await BookingController.checkSeatAvailablity(trip_id, res);
+      if (!available_seats.includes(parseInt(seat_number, 10))) {
         const errorMessage = `Seat number ${seat_number} is booked. ${errorStrings.availableSeatsAPI}`;
         return ResponseHelper.error(res, 409, errorMessage);
       }
       const created_on = moment().format('llll');
       const newBooking = await bookingModel.createBookingQuery(req.user.id, trip_id, seat_number, created_on);
-      if (!newBooking) {
-        throw new Error('');
-      }
       const booking = await bookingModel.getBookingById(newBooking.id);
       return ResponseHelper.success(res, 201, booking[0]);
     } catch (error) {
@@ -103,8 +99,9 @@ class BookingController {
 
   /**
   * Generate list of available seat numbers for booking
-  * @param {object} trip_id
-  * @returns {array} array of integers
+  * @param {object} req
+  * @param {object} res
+  * @returns {object} response object with array of available seats
   */
   static async getAvailableSeats(req, res) {
     try {
@@ -112,16 +109,7 @@ class BookingController {
       if (!tripInfo) {
         return ResponseHelper.error(res, 404, errorStrings.tripNotFound);
       }
-      // convert capacity (integer) to array of integers
-      const busSeats = Array.from(new Array(tripInfo.capacity), (x, i) => i + 1);
-
-      // get already booked seats for this trip
-      let bookedSeats = await bookingModel.getBookedSeats(req.params.tripId);
-      bookedSeats = bookedSeats.map(x => x.seat_number);
-
-      // the differece of arrays busSeats and bookedSeats gives availableSeats
-      const available_seats = busSeats.filter(x => !bookedSeats.includes(x));
-
+      const available_seats = await BookingController.checkSeatAvailablity(req.params.tripId, res);
       return ResponseHelper.success(res, 200, { available_seats });
     } catch (error) {
       return ResponseHelper.error(res, 500, errorStrings.serverError);
@@ -129,18 +117,27 @@ class BookingController {
   }
 
   /**
-  * Check if a seat number is available to assign a value
+  * Calculate available seats from booked seat numbers
   * @param {object} trip_id
-  * @param {object} seat_number
-  * @returns {boolean}
+  * @param {object} res
+  * @returns {array} array of available seats
   */
-  static async checkSeatAvailablity(trip_id, seat_number) {
+  static async checkSeatAvailablity(trip_id, res) {
     try {
+      const tripInfo = await tripModel.getTripInformationQuery(trip_id);
+      // convert capacity (integer) to array of integers
+      const busSeats = Array.from(new Array(tripInfo.capacity), (x, i) => i + 1);
+
       // get already booked seats for this trip
       let bookedSeats = await bookingModel.getBookedSeats(trip_id);
       bookedSeats = bookedSeats.map(x => x.seat_number);
-      const inArray = bookedSeats.includes(parseInt(seat_number, 10));
-      return inArray;
+
+      // the differece of arrays busSeats and bookedSeats gives availableSeats
+      const available_seats = busSeats.filter(x => !bookedSeats.includes(x));
+      if (available_seats.length === 0) {
+        return ResponseHelper.error(res, 409, errorStrings.seatsOccupied);
+      }
+      return available_seats;
     } catch (error) {
       return undefined;
     }

@@ -3,6 +3,7 @@ import errorStrings from '../helpers/errorStrings';
 import rules from '../helpers/rules';
 import Validator from '../helpers/Validator';
 import responseHelper from '../helpers/responseHelper';
+import BookingController from '../controllers/bookingController';
 
 
 /**
@@ -24,12 +25,16 @@ class ValidateBooking {
    * @callback {Function} next
    * @return {Object} error
    */
-  static validateCreateBooking(request, response, next) {
+  static async validateCreateBooking(request, response, next) {
     const createBookingSchema = Joi.object().keys({
       trip_id: validId.error(new Error(errorStrings.validTripId)),
-      seat_number: Joi.number().min(1).required(),
+      seat_number: Joi.number().min(1),
     });
-
+    const seat_no = request.body.seat_number;
+    if (!seat_no || seat_no === '' || typeof seat_no === 'string') {
+      const available_seats = await BookingController.checkSeatAvailablity(request.body.trip_id, response);
+      [request.body.seat_number] = available_seats;
+    }
     const error = Validator.validateJoi(request.body, createBookingSchema);
     if (!error) {
       return next();
