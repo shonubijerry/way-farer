@@ -23,7 +23,10 @@ class Auth {
 
   static authenticateUser(request, response, next) {
     try {
-      const token = request.headers.authorization;
+      let token = request.headers.authorization;
+      if (token && token.startsWith('Bearer ')) {
+        token = token.slice(7, token.length);
+      }
       request.user = Auth.verifyToken(token);
       return next();
     } catch (error) {
@@ -43,7 +46,10 @@ class Auth {
  */
   static authenticateAdmin(request, response, next) {
     try {
-      const token = request.headers.authorization;
+      let token = request.headers.authorization;
+      if (token && token.startsWith('Bearer ')) {
+        token = token.slice(7, token.length);
+      }
       request.user = Auth.verifyToken(token);
       if (request.user.is_admin === false) {
         return ResponseHelper.error(response, 403, errorStrings.notAllowed);
