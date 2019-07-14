@@ -17,7 +17,11 @@ class Validator {
    */
   static validateJoi(data, schema) {
     let error = '';
-    Joi.validate(data, schema, (err) => {
+    const validationOptions = {
+      allowUnknown: true, // allow unknown keys that will be ignored
+      stripUnknown: true, // remove unknown keys from the validated data
+    };
+    Joi.validate(data, schema, validationOptions, (err) => {
       if (err) {
         error = err.details ? err.details[0].message.replace(/['"]/g, '') : err.message;
       }

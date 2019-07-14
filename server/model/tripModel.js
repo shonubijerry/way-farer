@@ -1,11 +1,9 @@
-import uuid from 'uuid';
 import Model from './model';
 
 /**
 * @fileOverview - class manages all trip data storage
 * @class - tripModel
 * @exports - tripModel.js
-* @requires - uuid
 * @requires - ./model
 * */
 
@@ -17,14 +15,13 @@ class TripModel extends Model {
    */
 
   async createTripQuery({
-    bus_id, origin, destination, fare,
-  }, trip_date, created_on) {
+    bus_id, origin, destination, trip_date, fare,
+  }) {
     try {
-      const id = uuid();
       const { rows } = await this.insert(
-        'id, bus_id, origin, destination, trip_date, fare, created_on', '$1, $2, $3, $4, $5, $6, $7',
+        'bus_id, origin, destination, trip_date, fare', '$1, $2, $3, $4, $5',
         [
-          id, bus_id, origin, destination, trip_date, fare, created_on,
+          bus_id, origin, destination, trip_date, fare,
         ],
       );
       return rows[0];

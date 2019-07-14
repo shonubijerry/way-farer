@@ -1,12 +1,10 @@
-import uuid from 'uuid';
 import Model from './model';
 
 /**
 * @fileOverview - class manages all bus data storage
 * @class - BusModel
-* @exports - BusModel
-* @requires - uuid
 * @requires - ./model
+* @exports - BusModel
 * */
 
 class BusModel extends Model {
@@ -17,14 +15,13 @@ class BusModel extends Model {
    */
 
   async createBusQuery({
-    number_plate, manufacturer, model, year, capacity, created_on,
+    number_plate, manufacturer, model, year, capacity,
   }) {
     try {
-      const id = uuid();
       const { rows } = await this.insert(
-        'id, number_plate, manufacturer, model, year, capacity, created_on', '$1, $2, $3, $4, $5, $6, $7',
+        'number_plate, manufacturer, model, year, capacity', '$1, $2, $3, $4, $5',
         [
-          id, number_plate.toUpperCase(), manufacturer, model, year, capacity, created_on,
+          number_plate.toUpperCase(), manufacturer, model, year, capacity,
         ],
       );
       return rows[0];

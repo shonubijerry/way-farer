@@ -1,11 +1,9 @@
-import uuid from 'uuid';
 import Model from './model';
 
 /**
 * @fileOverview - class manages all booking data model
 * @class - tripModel
 * @exports - tripModel.js
-* @requires - uuid
 * @requires - ./model
 * */
 
@@ -16,13 +14,12 @@ class BookingModel extends Model {
    * @returns {object} user
    */
 
-  async createBookingQuery(user_id, trip_id, seat_number, created_on) {
+  async createBookingQuery(user_id, trip_id, seat_number) {
     try {
-      const id = uuid();
       const { rows } = await this.insert(
-        'id, user_id, trip_id, seat_number, created_on', '$1, $2, $3, $4, $5',
+        'user_id, trip_id, seat_number', '$1, $2, $3',
         [
-          id, user_id, trip_id, seat_number, created_on,
+          user_id, trip_id, seat_number,
         ],
       );
       return rows[0];
@@ -68,7 +65,7 @@ class BookingModel extends Model {
   async getBookingById(booking_id) {
     try {
       const { rows } = await this.selectWithJoin(
-        'booking.id as booking_id, user_id, trip_id, bus_id, trip_date, seat_number, first_name, last_name, email, booking.created_on',
+        'booking.id, user_id, trip_id, bus_id, trip_date, seat_number, first_name, last_name, email, booking.created_on',
         'JOIN trip ON (booking.trip_id = trip.id) JOIN users ON (booking.user_id = users.id)',
         'booking.id=$1',
         [booking_id],

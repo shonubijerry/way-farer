@@ -1,4 +1,3 @@
-import uuid from 'uuid';
 import passwordHelper from '../helpers/password';
 import Model from './model';
 
@@ -8,7 +7,6 @@ import Model from './model';
 * @class - usersModel
 * @exports - usersModel.js
 * @requires - ../helpers/password
-* @requires - ../dummy/users
 * @requires - ../helpers/utils
 * */
 
@@ -21,14 +19,13 @@ class UsersModel extends Model {
 
   async signupQuery({
     email, first_name, last_name, password,
-  }, registered_on) {
+  }) {
     const hashedPassword = passwordHelper.passwordHash(password);
-    const id = uuid();
     try {
       const { rows } = await this.insert(
-        'id, email, first_name, last_name, password, registered_on', '$1, $2, $3, $4, $5, $6',
+        'email, first_name, last_name, password', '$1, $2, $3, $4',
         [
-          id, email, first_name, last_name, hashedPassword, registered_on,
+          email, first_name, last_name, hashedPassword,
         ],
       );
       return rows[0];

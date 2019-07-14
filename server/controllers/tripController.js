@@ -1,4 +1,3 @@
-import moment from 'moment';
 import TripModel from '../model/tripModel';
 import BusModel from '../model/busModel';
 import errorStrings from '../helpers/errorStrings';
@@ -34,9 +33,7 @@ class TripController {
       if (busScheduled) {
         return ResponseHelper.error(res, 409, errorStrings.busNotAvailable);
       }
-      const created_on = moment().format('llll');
-      const trip_date = moment(req.body.trip_date).format('llll');
-      const newTrip = await tripModel.createTripQuery(req.body, trip_date, created_on);
+      const newTrip = await tripModel.createTripQuery(req.body);
       if (!newTrip) {
         throw new Error(errorStrings.serverError);
       }

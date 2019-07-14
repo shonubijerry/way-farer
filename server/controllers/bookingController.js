@@ -40,7 +40,8 @@ class BookingController {
         const errorMessage = `Seat number ${seat_number} exceeds bus capacity of ${tripInfo.capacity}. ${errorStrings.availableSeatsAPI}`;
         return ResponseHelper.error(res, 406, errorMessage);
       }
-      const isPastTrip = moment().isAfter(moment(tripInfo.trip_date, 'llll'));
+      console.log(tripInfo.trip_date);
+      const isPastTrip = moment().isAfter(moment(tripInfo.trip_date, 'YYYY-MM-DD HH:mm:ss.SSS'));
       if (isPastTrip) {
         return ResponseHelper.error(res, 422, errorStrings.pastTrip);
       }
@@ -49,8 +50,7 @@ class BookingController {
         const errorMessage = `Seat number ${seat_number} is booked. ${errorStrings.availableSeatsAPI}`;
         return ResponseHelper.error(res, 409, errorMessage);
       }
-      const created_on = moment().format('llll');
-      const newBooking = await bookingModel.createBookingQuery(req.user.id, trip_id, seat_number, created_on);
+      const newBooking = await bookingModel.createBookingQuery(req.user.id, trip_id, seat_number);
       const booking = await bookingModel.getBookingById(newBooking.id);
       return ResponseHelper.success(res, 201, booking[0]);
     } catch (error) {

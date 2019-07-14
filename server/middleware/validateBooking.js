@@ -1,6 +1,5 @@
 import Joi from '@hapi/joi';
 import errorStrings from '../helpers/errorStrings';
-import rules from '../helpers/rules';
 import Validator from '../helpers/Validator';
 import responseHelper from '../helpers/responseHelper';
 import BookingController from '../controllers/bookingController';
@@ -15,7 +14,7 @@ import BookingController from '../controllers/bookingController';
  *    @exports ValidateTrip
  */
 
-const validId = Joi.string().regex(rules.validUuid).required();
+const validId = Joi.number().required();
 
 class ValidateBooking {
   /**

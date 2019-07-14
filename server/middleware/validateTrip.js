@@ -1,6 +1,5 @@
 import Joi from '@hapi/joi';
 import errorStrings from '../helpers/errorStrings';
-import rules from '../helpers/rules';
 import Validator from '../helpers/Validator';
 import responseHelper from '../helpers/responseHelper';
 
@@ -14,7 +13,7 @@ import responseHelper from '../helpers/responseHelper';
  *    @exports ValidateTrip
  */
 
-const validId = Joi.string().regex(rules.validUuid).required();
+const validId = Joi.number().required();
 
 class ValidateTrip {
   /**
@@ -30,9 +29,8 @@ class ValidateTrip {
       origin: Joi.string().required(),
       destination: Joi.string().required(),
       trip_date: Joi.date().iso().greater(new Date()).required(),
-      fare: Joi.number().precision(2).required(),
+      fare: Joi.number().required(),
     });
-
     const error = Validator.validateJoi(request.body, createTripSchema);
     if (!error) {
       return next();
