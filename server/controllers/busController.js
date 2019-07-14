@@ -1,4 +1,3 @@
-import moment from 'moment';
 import BusModel from '../model/busModel';
 import errorStrings from '../helpers/errorStrings';
 import ResponseHelper from '../helpers/responseHelper';
@@ -28,7 +27,6 @@ class BusController {
       if (busExists) {
         return ResponseHelper.error(res, 409, `Bus with number plate ${number_plate} has already been added`);
       }
-      req.body.created_on = moment().format('llll');
       const newBus = await busModel.createBusQuery(req.body);
       if (!newBus) {
         throw new Error(errorStrings.serverError);

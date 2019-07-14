@@ -1,4 +1,3 @@
-import moment from 'moment';
 import UsersModel from '../model/usersModel';
 import generateToken from '../helpers/token';
 import errorStrings from '../helpers/errorStrings';
@@ -30,8 +29,7 @@ class UsersController {
       if (isAreadyRegistered) {
         return ResponseHelper.error(res, 409, errorStrings.emailExists);
       }
-      const registered_on = moment().format('llll');
-      const newUser = await usersModel.signupQuery(req.body, registered_on);
+      const newUser = await usersModel.signupQuery(req.body);
       if (!newUser) {
         throw new Error(errorStrings.serverError);
       }

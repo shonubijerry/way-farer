@@ -71,7 +71,7 @@ describe('BUS CONTROLLER', () => {
         chai.request(app)
           .post(busUrl)
           .send(testData.bus[0])
-          .set('Authorization', currentToken)
+          .set('Authorization', `Bearer ${currentToken}`)
           .end((error, res) => {
             expect(res).to.have.status(201);
             expect(res.body).to.be.a('object');
@@ -267,7 +267,7 @@ describe('BUS CONTROLLER', () => {
       it('It should get all buses for a user', (done) => {
         chai.request(app)
           .get(busUrl)
-          .set('Authorization', currentToken)
+          .set('Authorization', `Bearer ${currentToken}`)
           .end((error, res) => {
             expect(res).to.have.status(200);
             expect(res.body).to.be.a('object');

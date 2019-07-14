@@ -414,7 +414,7 @@ describe('TRIP CONTROLLER', () => {
   });
   describe('CANCEL A TRIP', () => {
     it('it should return authentication error', (done) => {
-      const tripId = 'aaac8272-4b57-423c-906f-3da93e823f49'; // active trip
+      const tripId = '1'; // active trip
       chai.request(app)
         .patch(`${tripUrl}/${tripId}`)
         .end((error, res) => {
@@ -439,7 +439,7 @@ describe('TRIP CONTROLLER', () => {
           });
       });
       it('it should not cancel a trip if user is not admin', (done) => {
-        const tripId = 'aaac8272-4b57-423c-906f-3da93e823f49'; // active trip
+        const tripId = '1'; // active trip
         chai.request(app)
           .patch(`${tripUrl}/${tripId}`)
           .set('Authorization', currentToken)
@@ -466,7 +466,7 @@ describe('TRIP CONTROLLER', () => {
           });
       });
       it('it should cancel a trip', (done) => {
-        const tripId = 'aaac8272-4b57-423c-906f-3da93e823f49'; // active trip
+        const tripId = '1'; // active trip
         chai.request(app)
           .patch(`${tripUrl}/${tripId}`)
           .set('Authorization', currentToken)
@@ -488,7 +488,7 @@ describe('TRIP CONTROLLER', () => {
       });
 
       it('it should not cancel a trip if trip is already cancelled', (done) => {
-        const tripId = 'bbbc8272-4b57-423c-906f-3da93e823f49'; // cancelled trip
+        const tripId = '2'; // cancelled trip
         chai.request(app)
           .patch(`${tripUrl}/${tripId}`)
           .set('Authorization', currentToken)
@@ -502,7 +502,7 @@ describe('TRIP CONTROLLER', () => {
       });
 
       it('it should not cancel a trip if it does not exist', (done) => {
-        const tripId = '344c8272-4b57-423c-906f-3da93e823f48'; // valid trip id
+        const tripId = '44'; // nonexistence trip id
         chai.request(app)
           .patch(`${tripUrl}/${tripId}`)
           .set('Authorization', currentToken)
@@ -516,7 +516,7 @@ describe('TRIP CONTROLLER', () => {
       });
 
       it('it should not cancel a trip if tripId is invalid', (done) => {
-        const tripId = '344c8272-4b57-423c-906f-3da93e823f48qw'; // invalid trip id
+        const tripId = '34re'; // invalid trip id
         chai.request(app)
           .patch(`${tripUrl}/${tripId}`)
           .set('Authorization', currentToken)
