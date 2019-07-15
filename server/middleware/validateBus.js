@@ -30,7 +30,8 @@ class ValidateBus {
       manufacturer: Joi.string().required(),
       model: Joi.string().required(),
       year: Joi.number().integer().min(1970).required(),
-      capacity: Joi.number().integer().max(400).required(),
+      capacity: Joi.number().integer().min(1).max(400)
+        .required(),
     });
 
     const error = Validator.validateJoi(request.body, createBusSchema);
