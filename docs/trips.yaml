@@ -19,7 +19,7 @@ paths:
         schema:
           $ref: '#/definitions/CreateTripReq'
       responses:
-        200:
+        201:
           description: Trip successfully created
           schema:
             $ref: '#/definitions/CreateTripRes'
@@ -140,15 +140,18 @@ definitions:
     type: object
     properties:
       bus_id:
-        type: string
+        type: integer
+        format: int64
       origin:
         type: string
       destination:
-        type: string  
-      trip_date:
-        type: string  
-      fare:
         type: string
+      trip_date:
+        type: string
+        format: date-time 
+      fare:
+        type: number
+        format: float
   CreateTripRes:
     type: object
     properties:
@@ -158,26 +161,26 @@ definitions:
         type: object
         properties:
           id:
-            type: string
+            type: integer
+            format: int64
           bus_id:
-            type: string
+            type: integer
+            format: int64
           origin:
             type: string
           destination:
             type: string  
           trip_date:
-            type: string  
+            type: string
+            format: date-time 
           fare:
-            type: string 
+            type: number
+            format: float
           status:
             type: string  
           created_on:
             type: string
-  GetTripsReq:
-    type: object
-    properties:
-      filter_by:
-        type: string
+            format: date-time
   GetTripsRes:
     type: object
     properties:
@@ -189,21 +192,26 @@ definitions:
           type: object
           properties:
             id:
-              type: string
+              type: integer
+              format: int64
             bus_id:
-              type: string
+              type: integer
+              format: int64
             origin:
               type: string
             destination:
               type: string  
             trip_date:
-              type: string  
+              type: string
+              format: date-time 
             fare:
-              type: string 
+              type: number
+              format: float
             status:
               type: string  
             created_on:
               type: string
+              format: date-time
   CancelTripRes:
     type: object
     properties:
@@ -212,22 +220,27 @@ definitions:
       data:
         type: object
         properties:
-          trip_id:
-            type: string
+          id:
+            type: integer
+            format: int64
           bus_id:
-            type: string
+            type: integer
+            format: int64
           origin:
             type: string
           destination:
             type: string  
           trip_date:
-            type: string  
+            type: string
+            format: date-time 
           fare:
-            type: string 
+            type: number
+            format: float
           status:
-            type: string  
+            type: string  # calcelled or active 
           created_on:
-            type: string 
+            type: string
+            format: date-time 
           message:
             type: string       
   errorDef:

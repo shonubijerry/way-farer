@@ -77,8 +77,10 @@ definitions:
         type: string
       email:
         type: string
+        format: email
       password:
         type: string
+        format: password
   UserSignupRes:
     type: object
     properties:
@@ -88,28 +90,35 @@ definitions:
         type: object
         properties:
           user_id:
-            type: string
+            type: integer
+            format: int64
           first_name:
             type: string
           last_name:
             type: string
           email:
             type: string
+            format: email
           password:
-            type: string  
+            type: string
+            format: password  
           is_admin:
-            type: string  
+            type: boolean  
           token:
             type: string  
           registered_on:
-            type: string  
+            type: string
+            format: date-time  
   UserSigninReq:
     type: object
     properties:
       email:
         type: string
+        format: email
       password:
-        type: string    
+        type: string
+        format: password
+        minLength: 8  
   errorDef:
     type: object
     properties:

@@ -15,12 +15,12 @@ paths:
       - name: body
         in: body
         description: Booking object
-        required: false
+        required: true
         schema:
           $ref: '#/definitions/CreateBookingReq'
       responses:
-        200:
-          description: Trip successfully created
+        201:
+          description: Booking successfully created
           schema:
             $ref: '#/definitions/CreateBookingRes'
         400:
@@ -32,7 +32,7 @@ paths:
           schema:
             $ref: '#/definitions/errorDef'
         404:
-          description: Trip not found
+          description: Booking not found
           schema:
             $ref: '#/definitions/errorDef'
         406:
@@ -82,7 +82,7 @@ paths:
       security:
       - Bearer: []
       summary: It gets available seat numbers
-      description: Users can get an array of available seat numbers for booking
+      description: Users can get an array of available seat numbers for booking. Frontend developer can request this endpoint on page load so that users can select seat number from a dropdown input
       produces:
       - application/json
       parameters:
@@ -90,7 +90,8 @@ paths:
         in: path
         description: path parameter takes the trip id
         required: true
-        type: string
+        type: integer
+        format: int32
       responses:
         200:
           description: Seat numbers successfully fetched
@@ -127,7 +128,8 @@ paths:
         in: path
         description: path parameter takes the booking id
         required: true
-        type: string
+        type: integer
+        format: int32
       responses:
         200:
           description: Booking successfully deleted
@@ -154,9 +156,12 @@ definitions:
     type: object
     properties:
       trip_id:
-        type: string
+        type: integer
+        format: int64
       seat_number:
-        type: string
+        type: integer
+        format: int32
+        nullable: true
   CreateBookingRes:
     type: object
     properties:
@@ -166,25 +171,33 @@ definitions:
         type: object
         properties:
           booking_id:
-            type: string
+            type: integer
+            format: int64
           user_id:
-            type: string
+            type: integer
+            format: int64
           trip_id:
-            type: string
+            type: integer
+            format: int64
           bus_id:
-            type: string 
+            type: integer
+            format: int64
           trip_date:
-            type: string 
+            type: string
+            format: date-time
           seat_number:
-            type: string 
+            type: integer
+            format: int32 
           first_name:
             type: string 
           last_name:
             type: string  
           email:
-            type: string  
+            type: string
+            format: email 
           created_on:
             type: string
+            format: date-time
   GetBookingsRes:
     type: object
     properties:
@@ -196,25 +209,33 @@ definitions:
           type: object
           properties:
             booking_id:
-              type: string
+              type: integer
+              format: int64
             user_id:
-              type: string
+              type: integer
+              format: int64
             trip_id:
-              type: string
+              type: integer
+              format: int64
             bus_id:
-              type: string 
+              type: integer
+              format: int64
             trip_date:
-              type: string 
+              type: string
+              format: date-time
             seat_number:
-              type: string 
+              type: integer
+              format: int32 
             first_name:
               type: string 
             last_name:
               type: string  
             email:
-              type: string  
+              type: string
+              format: email 
             created_on:
               type: string
+              format: date-time
   AvailableSeatsRes:
     type: object
     properties:
@@ -226,7 +247,8 @@ definitions:
           available_seats:
             type: array
             items:
-              type: string  
+              type: integer
+              format: int32
   DeleteBookingRes:
     type: object
     properties:
