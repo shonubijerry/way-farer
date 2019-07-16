@@ -13,6 +13,7 @@ const rules = {
   passwordLength: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
   validUuid: /^[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}$/,
   validPlateNumber: /^[A-Za-z]{3}-[0-9]{3}-[A-Za-z]{2}$/,
+  validNumber: /^-?[0-9]+$/,
 };
 
 export default rules;

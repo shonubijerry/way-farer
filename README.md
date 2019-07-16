@@ -69,7 +69,7 @@ e.g npm start
 e.g npm test
 ```
 
-### API End Points Test Using Postman
+## API End Points Test Using Postman
 
 <table>
 <tr><th>HTTP VERB</th><th>ENDPOINT</th><th>FUNCTIONALITY</th></tr>
@@ -103,7 +103,7 @@ e.g npm test
 </table>
 
 
-### Coding Style
+## Coding Style
 * Airbnb style guide. 
 
 ## Features

@@ -106,7 +106,11 @@ paths:
           schema:
             $ref: '#/definitions/errorDef'
         404:
-          description: Trip not found
+          description: Trip not found or No available seat on the trip
+          schema:
+            $ref: '#/definitions/errorDef'
+        422:
+          description: Trip has been cancelled or trip is in the past
           schema:
             $ref: '#/definitions/errorDef'
         500:

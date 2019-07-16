@@ -383,7 +383,7 @@ describe('BOOKING CONTROLLER', () => {
 
       it('It should get all available seats for a specific trip', (done) => {
         chai.request(app)
-          .get(`${bookingUrl}/2/availableSeats`)
+          .get(`${bookingUrl}/1/availableSeats`)
           .set('Authorization', currentToken)
           .end((error, res) => {
             expect(res).to.have.status(200);
@@ -409,7 +409,7 @@ describe('BOOKING CONTROLLER', () => {
           });
       });
 
-      it('It should get available seats if trip id is invalid', (done) => {
+      it('It should not get available seats if trip id is invalid', (done) => {
         chai.request(app)
           .get(`${bookingUrl}/1-77763y/availableSeats`)
           .set('Authorization', currentToken)
@@ -418,6 +418,32 @@ describe('BOOKING CONTROLLER', () => {
             expect(res.body).to.be.a('object');
             expect(res.body).to.have.property('error');
             expect(res.body.error).to.equal(errorStrings.validTripId);
+            done();
+          });
+      });
+
+      it('It should get available seats if trip is cancelled', (done) => {
+        chai.request(app)
+          .get(`${bookingUrl}/2/availableSeats`)
+          .set('Authorization', currentToken)
+          .end((error, res) => {
+            expect(res).to.have.status(422);
+            expect(res.body).to.be.a('object');
+            expect(res.body).to.have.property('error');
+            expect(res.body.error).to.equal(errorStrings.cancelledTripSeats);
+            done();
+          });
+      });
+
+      it('It should get available seats if trip date is in the past', (done) => {
+        chai.request(app)
+          .get(`${bookingUrl}/4/availableSeats`)
+          .set('Authorization', currentToken)
+          .end((error, res) => {
+            expect(res).to.have.status(422);
+            expect(res.body).to.be.a('object');
+            expect(res.body).to.have.property('error');
+            expect(res.body.error).to.equal(errorStrings.pastTripSeats);
             done();
           });
       });
