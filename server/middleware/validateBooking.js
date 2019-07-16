@@ -2,7 +2,11 @@ import Joi from '@hapi/joi';
 import errorStrings from '../helpers/errorStrings';
 import Validator from '../helpers/Validator';
 import responseHelper from '../helpers/responseHelper';
+import rules from '../helpers/rules';
 import BookingController from '../controllers/bookingController';
+import TripModel from '../model/tripModel';
+
+const tripModel = new TripModel('trip');
 
 
 /**
@@ -14,7 +18,7 @@ import BookingController from '../controllers/bookingController';
  *    @exports ValidateTrip
  */
 
-const validId = Joi.number().required();
+const validId = Joi.number().min(1).required();
 
 class ValidateBooking {
   /**
@@ -29,9 +33,13 @@ class ValidateBooking {
       trip_id: validId.error(new Error(errorStrings.validTripId)),
       seat_number: Joi.number().min(1),
     });
-    const seat_no = request.body.seat_number;
-    if (!seat_no || seat_no === '' || typeof seat_no === 'string') {
-      const available_seats = await BookingController.checkSeatAvailablity(request.body.trip_id, response);
+    const { trip_id, seat_number } = request.body;
+    if (!rules.validNumber.test(seat_number)) {
+      const tripInfo = await tripModel.getTripInformationQuery(trip_id);
+      if (!tripInfo) {
+        return responseHelper.error(response, 404, errorStrings.tripNotFound);
+      }
+      const available_seats = await BookingController.checkSeatAvailablity(trip_id, tripInfo.capacity);
       [request.body.seat_number] = available_seats;
     }
     const error = Validator.validateJoi(request.body, createBookingSchema);
