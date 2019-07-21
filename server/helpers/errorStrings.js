@@ -10,7 +10,7 @@ const errorStrings = {
   passwordEmpty: 'password is not allowed to be empty',
   passwordLength: 'password length must be at least 8 characters long',
   emailExists: 'Email address has already been registered',
-  validName: 'Name field cannot be empty and must be only letters',
+  validName: 'field cannot be empty and must be only letters',
   validEmail: 'email must be a valid email',
   loginFailure: 'Could not login. Email and password do not match',
   validBusId: 'Enter a valid bus id',

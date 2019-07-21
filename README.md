@@ -76,7 +76,7 @@ e.g npm test
 
 <tr><td>POST</td> <td>/api/v1/auth/signup</td>  <td>User signup</td></tr>
 
-<tr><td>POST</td> <td>/api/v1/auth/login</td>  <td>User signin</td></tr>
+<tr><td>POST</td> <td>/api/v1/auth/signin</td>  <td>User signin</td></tr>
 
 <tr><td>POST</td> <td>/api/v1/trips</td>  <td>Create a trip</td></tr>
 
