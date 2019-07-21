@@ -24,13 +24,13 @@ class ValidateUser {
    * @return {Object} error
    */
   static validateSignupFormData(request, response, next) {
-    const name = Joi.string().regex(rules.validName).required().error(new Error(errorStrings.validName));
+    const name = Joi.string().regex(rules.validName).required();
     const password = Joi.string().min(8).required().strict();
     const email = Joi.string().email().lowercase().required();
 
     const createSignUpSchema = Joi.object().keys({
-      first_name: name,
-      last_name: name,
+      first_name: name.error(new Error(`first_name ${errorStrings.validName}`)),
+      last_name: name.error(new Error(`last_name ${errorStrings.validName}`)),
       password,
       email,
     });

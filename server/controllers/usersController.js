@@ -59,8 +59,7 @@ class UsersController {
       const userData = UsersController.createUserObject(signInResult);
       return ResponseHelper.success(res, 200, userData);
     } catch (error) {
-      // return ResponseHelper.error(res, 500, errorStrings.serverError);
-      return ResponseHelper.error(res, 500, error.message);
+      return ResponseHelper.error(res, 500, errorStrings.serverError);
     }
   }
 

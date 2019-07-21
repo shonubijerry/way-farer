@@ -50,7 +50,7 @@ describe('USER CONTROLLER', () => {
           expect(res).to.have.status(400);
           expect(res.body).to.be.an('object');
           expect(res.body).to.have.property('error');
-          expect(res.body.error).to.equal(errorStrings.validName);
+          expect(res.body.error).to.equal(`first_name ${errorStrings.validName}`);
           done();
         });
     });
@@ -68,7 +68,7 @@ describe('USER CONTROLLER', () => {
           expect(res).to.have.status(400);
           expect(res.body).to.be.an('object');
           expect(res.body).to.have.property('error');
-          expect(res.body.error).to.equal(errorStrings.validName);
+          expect(res.body.error).to.equal(`last_name ${errorStrings.validName}`);
           done();
         });
     });
